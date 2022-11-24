@@ -1,0 +1,20 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:key="autoConnect"
+        app:title="Auto-Connect"
+        app:summary="Automatically Connect to Bluetooth Device on Startup"/>
+
+    <ListPreference
+        app:key="preferredDevice"
+        app:title="Preferred Device"
+        app:summary="Preferred Bluetooth Device"
+        app:isPreferenceVisible="false"/>
+
+    <SwitchPreference
+        app:key="disableAnimation"
+        app:title="Disable Animation"
+        app:summary="Disable Startup Animation"/>
+
+</PreferenceScreen>
