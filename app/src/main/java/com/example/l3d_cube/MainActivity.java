@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -26,11 +27,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.example.l3d_cube.databinding.ActivityMainBinding;
 
@@ -46,8 +51,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     // Animation Variables
     private LottieAnimationView animationView;
-//    private final int animationDelay = 3300;
-    private final int animationDelay = 0;
 
     // Toolbar
     private AppBarLayout appBarLayout;
@@ -58,8 +61,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
     private final String BTAG = "Bluetooth: ";
     private ActivityResultLauncher<Intent> btActivityResultLauncher;
     private ActivityResultLauncher<String> btRequestPermission;
-
     BluetoothAdapter bluetoothAdapter;
+
+    // Settings
+    private SharedPreferences sharedPreferences;
+    private boolean shouldDisableAnimation;
+    private boolean shouldAutoConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
         setContentView(binding.getRoot());
 
         animationView = binding.animationView;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        shouldDisableAnimation = sharedPreferences.getBoolean("disableAnimation", false);
         startAsyncAnimation();
 
         appBarLayout = binding.appbarLayout;
@@ -95,9 +104,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
         registerBTActivity();
         registerBTPermissionRequest();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        autoConnect();
     }
 
     public void startAsyncAnimation() {
+        int animationDelay = shouldDisableAnimation ? 0 : 3300;
         final Handler handler = new Handler();
         handler.postDelayed(() -> {
             appBarLayout.setVisibility(View.VISIBLE);
@@ -126,23 +138,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     public void registerBTActivity(){
         btActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        connectToBluetooth();
-                    }
-                });
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    connectToBluetooth();
+                }
+            });
     }
 
     public void registerBTPermissionRequest(){
         btRequestPermission = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                        result -> {
-                            if (result) {
-                                connectToBluetooth();
-                            }
-                        }
-                );
+            new ActivityResultContracts.RequestPermission(),
+                result -> {
+                    if (result) {
+                        connectToBluetooth();
+                    }
+                });
     }
 
     @SuppressLint("MissingPermission")
@@ -181,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
     private void showSelectionDialog(Set<BluetoothDevice> pairedDevices) {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
-        List<BluetoothDevice> devices = new ArrayList<>(pairedDevices);
+        List<BluetoothDevice> devices = BluetoothUtils.getBondedDevices();
         List<String> deviceNameAddress = BluetoothUtils.getBluetoothNamesAndAddresses(devices);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -200,6 +211,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
                 });
         alertDialog.setTitle("Select a Bluetooth Module");
         alertDialog.show();
+    }
+
+    private void autoConnect() {
+        shouldAutoConnect = sharedPreferences.getBoolean("autoConnect", false);
+        if(shouldAutoConnect){
+            String autoConnectDevice = sharedPreferences.getString("preferredDevice", null);
+            if(autoConnectDevice != null) {
+                BluetoothDevice selectedDevice = BluetoothUtils.findBluetoothDevice(autoConnectDevice);
+                if(selectedDevice != null) {
+                    bluetoothViewModel.connect(selectedDevice);
+                    return;
+                }
+            }
+        }
     }
 
     public BluetoothViewModel getBluetoothViewModel(){

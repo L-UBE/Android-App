@@ -2,6 +2,7 @@ package com.example.l3d_cube.bluetooth;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -38,16 +39,39 @@ public class BluetoothUtils {
     }
 
     @SuppressLint("MissingPermission")
+    public static List<BluetoothDevice> getBondedDevices() {
+        return new ArrayList<>(BluetoothAdapter.getDefaultAdapter().getBondedDevices());
+    }
+
+    @SuppressLint("MissingPermission")
     public static List<String> getBluetoothNamesAndAddresses(List<BluetoothDevice> bluetoothDevices){
         List<String> deviceNamesAddresses = new ArrayList<>();
-        for (BluetoothDevice device : bluetoothDevices)
-        {
-
+        for (BluetoothDevice device : bluetoothDevices) {
             String deviceName = device.getName();
             String deviceAddress = device.getAddress();
             deviceNamesAddresses.add(deviceName + "\n" + deviceAddress);
         }
         return deviceNamesAddresses;
+    }
+
+    @SuppressLint("MissingPermission")
+    public static List<String> getBluetoothNames(List<BluetoothDevice> bluetoothDevices){
+        List<String> deviceNames = new ArrayList<>();
+        for (BluetoothDevice device : bluetoothDevices) {
+            deviceNames.add(device.getName());
+        }
+        return deviceNames;
+    }
+
+    @SuppressLint("MissingPermission")
+    public static BluetoothDevice findBluetoothDevice(String deviceName) {
+        List<BluetoothDevice> bluetoothDevices = getBondedDevices();
+        for (BluetoothDevice device : bluetoothDevices) {
+            if(device.getName().equals(deviceName)){
+                return device;
+            }
+        }
+        return null;
     }
 
     public static boolean isSorAbove() {
@@ -82,6 +106,11 @@ public class BluetoothUtils {
 
     public static void noBluetoothDeviceConnectedToast(Context context){
         String failMsg = "No Bluetooth Device connected";
+        bluetoothErrorToast(context, failMsg);
+    }
+
+    public static void autoConnectFailedToast(Context context){
+        String failMsg = "Auto-Connect failed";
         bluetoothErrorToast(context, failMsg);
     }
 
