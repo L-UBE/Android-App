@@ -3,29 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_math">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.l3d_cube.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_math"
+        android:name="com.example.l3d_cube.ui.MathFragment"
+        android:label="@string/title_math"
+        tools:layout="@layout/fragment_math" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.l3d_cube.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_gesture"
+        android:name="com.example.l3d_cube.ui.GestureFragment"
+        android:label="@string/title_gesture"
+        tools:layout="@layout/fragment_gesture" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.l3d_cube.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_upload"
+        android:name="com.example.l3d_cube.ui.UploadFragment"
+        android:label="@string/title_upload"
+        tools:layout="@layout/fragment_upload" />
 
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.example.l3d_cube.ui.SettingsFragment"
-        android:label="@string/settings"
+        android:label="@string/title_settings"
         tools:layout="@xml/fragment_settings" />
 </navigation>

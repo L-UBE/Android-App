@@ -1,4 +1,4 @@
-package com.example.l3d_cube.ui.dashboard;
+package com.example.l3d_cube.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,13 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.l3d_cube.databinding.FragmentGestureBinding;
 import com.example.l3d_cube.gesture.GestureUtils;
-import com.example.l3d_cube.databinding.FragmentDashboardBinding;
-import com.example.l3d_cube.ui.FragmentDataTransfer;
 
-public class DashboardFragment extends Fragment{
+public class GestureFragment extends Fragment{
 
-    private FragmentDashboardBinding binding;
+    private FragmentGestureBinding binding;
     private Context context;
 
     FragmentDataTransfer fragmentDataTransfer;
@@ -30,14 +29,14 @@ public class DashboardFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentGestureBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         context = getActivity();
 
         motionDetector = new GestureDetectorCompat(context, new GestureListener());
 
-        binding.layout.setOnTouchListener((view, motionEvent) -> {
+        binding.gesturePad.setOnTouchListener((view, motionEvent) -> {
             motionDetector.onTouchEvent(motionEvent);
             return true;
         });

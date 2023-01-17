@@ -1,4 +1,4 @@
-package com.example.l3d_cube.ui.notifications;
+package com.example.l3d_cube.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,21 +12,20 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.l3d_cube.ArrayUtils;
-import com.example.l3d_cube.databinding.FragmentNotificationsBinding;
-import com.example.l3d_cube.ui.FragmentDataTransfer;
+import com.example.l3d_cube.databinding.FragmentUploadBinding;
 
-public class NotificationsFragment extends Fragment {
+public class UploadFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+    private FragmentUploadBinding binding;
 
     FragmentDataTransfer fragmentDataTransfer;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        UploadViewModel notificationsViewModel =
+                new ViewModelProvider(this).get(UploadViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        binding = FragmentUploadBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textNotifications;

@@ -1,4 +1,4 @@
-package com.example.l3d_cube.ui.home;
+package com.example.l3d_cube.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,20 +13,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.l3d_cube.ArrayUtils;
 import com.example.l3d_cube.SystemUtils;
-import com.example.l3d_cube.ui.FragmentDataTransfer;
-import com.example.l3d_cube.databinding.FragmentHomeBinding;
+import com.example.l3d_cube.databinding.FragmentMathBinding;
 
 import org.mariuszgromada.math.mxparser.Argument;
 import org.mariuszgromada.math.mxparser.Expression;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.Arrays;
 
+public class MathFragment extends Fragment {
 
-public class HomeFragment extends Fragment {
-
-    private FragmentHomeBinding binding;
+    private FragmentMathBinding binding;
 
     private final int RESOLUTION_LIMIT = 100;
 
@@ -41,7 +36,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentMathBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         Context context = getContext();

@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
         BottomNavigationView navView = binding.bottomNavMenu;
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_settings)
+                R.id.navigation_math, R.id.navigation_gesture, R.id.navigation_upload, R.id.navigation_settings)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     private void autoConnect() {
         shouldAutoConnect = sharedPreferences.getBoolean("autoConnect", false);
-        if(shouldAutoConnect){
+        if(shouldAutoConnect && BluetoothUtils.isBluetoothPermissionGranted(this)){
             String autoConnectDevice = sharedPreferences.getString("preferredDevice", null);
             if(autoConnectDevice != null) {
                 BluetoothDevice selectedDevice = BluetoothUtils.findBluetoothDevice(autoConnectDevice);
