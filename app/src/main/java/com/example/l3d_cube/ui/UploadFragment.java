@@ -22,14 +22,14 @@ public class UploadFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        UploadViewModel notificationsViewModel =
+        UploadViewModel uploadViewModel =
                 new ViewModelProvider(this).get(UploadViewModel.class);
 
         binding = FragmentUploadBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        uploadViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         Context context = getContext();
 

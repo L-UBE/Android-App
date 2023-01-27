@@ -1,5 +1,7 @@
 package com.example.l3d_cube.ui;
 
+import static com.scichart.core.utility.Dispatcher.runOnUiThread;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,14 +25,17 @@ import org.mariuszgromada.math.mxparser.Expression;
 public class MathFragment extends Fragment {
 
     private FragmentMathBinding binding;
+    private Context context;
 
-    private final int RESOLUTION_LIMIT = 100;
+    private final int RESOLUTION_LIMIT = 1000;
 
     private EditText mathEquation;
     private EditText resolution;
     private EditText xoffset;
     private EditText yoffset;
     private Button sendButton;
+
+    private ProgressBar progressBar;
 
     FragmentDataTransfer fragmentDataTransfer;
 
@@ -39,7 +45,9 @@ public class MathFragment extends Fragment {
         binding = FragmentMathBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Context context = getContext();
+        context = getContext();
+
+        progressBar = binding.progressBar;
 
         mathEquation = binding.mathEquation;
         resolution = binding.resolution;
@@ -48,47 +56,71 @@ public class MathFragment extends Fragment {
         sendButton = binding.button;
 
         sendButton.setOnClickListener(view -> {
-            long startTimeMills = System.currentTimeMillis();
-
-
-            String exp = mathEquation.getText().toString();
-            int res = parseEditText(resolution);
-            int xoff = parseEditText(xoffset);
-            int yoff = parseEditText(yoffset);
-
-
-            if (res > RESOLUTION_LIMIT) {
-                SystemUtils.systemErrorToast(context, "Invalid resolution");
-                return;
-            }
-
-            Argument varX = new Argument("x");
-            Argument varY = new Argument("y");
-            Expression e = new Expression(exp, varX ,varY);
-
-            boolean validExpression = e.checkSyntax();
-            if(!validExpression){
-                SystemUtils.systemErrorToast(context, "Invalid expression");
-                return;
-            }
-
-            int[][] z = new int[100][100];
-            for (int x = 0; x < 100; x++) {
-                for(int y = 0; y < 100; y++) {
-                    varX.setArgumentValue(x);
-                    varY.setArgumentValue(y);
-                    z[x][y] = (int) e.calculate();
-                }
-            }
-
-            int[] flatArray = ArrayUtils.flatten(z);
-
-            sendToBluetooth(ArrayUtils.intArrayToByteArray(flatArray));
-
-            long endTimeMills = System.currentTimeMillis();
-            SystemUtils.systemInfoToast(context, "Elapsed Time: " + (endTimeMills - startTimeMills));
+            computeMathEquation();
         });
         return root;
+    }
+
+    private void computeMathEquation(){
+        new Thread(new Runnable() {
+            @Override public void run() {
+                long startTimeMills = System.currentTimeMillis();
+
+                progressBar.setProgress(0);
+                String exp = mathEquation.getText().toString();
+                int res = parseEditText(resolution);
+                int xoff = parseEditText(xoffset);
+                int yoff = parseEditText(yoffset);
+
+
+                if (res > RESOLUTION_LIMIT) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            SystemUtils.systemErrorToast(context, "Invalid resolution");
+                        }
+                    });
+                    return;
+                }
+
+                Argument varX = new Argument("x");
+                Argument varY = new Argument("y");
+                Expression e = new Expression(exp, varX ,varY);
+
+                boolean validExpression = e.checkSyntax();
+                if(!validExpression){
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            SystemUtils.systemErrorToast(context, "Invalid expression");
+                        }
+                    });
+                    return;
+                }
+
+                int[][] z = new int[res][res];
+                for (int x = 0; x < res; x++) {
+                    for(int y = 0; y < res; y++) {
+                        varX.setArgumentValue(x);
+                        varY.setArgumentValue(y);
+                        z[x][y] = (int) e.calculate();
+                    }
+                }
+
+                int[] flatArray = ArrayUtils.flatten(z);
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        sendToBluetooth(ArrayUtils.intArrayToByteArray(flatArray));
+                    }
+                });
+
+                long endTimeMills = System.currentTimeMillis();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        SystemUtils.systemInfoToast(context, "Elapsed Time: " + (endTimeMills - startTimeMills));
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
