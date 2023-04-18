@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.l3d_cube.bluetooth.BluetoothUtils;
-import com.example.l3d_cube.bluetooth.BluetoothViewModel;
+import com.example.l3d_cube.bluetooth.Client.BluetoothViewModel;
 import com.example.l3d_cube.ui.FragmentDataTransfer;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,21 +26,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.example.l3d_cube.databinding.ActivityMainBinding;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -54,19 +48,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     // Toolbar
     private AppBarLayout appBarLayout;
-    private Toolbar toolbar;
     private Menu menu;
 
     // Bluetooth Variables
     private final String BTAG = "Bluetooth: ";
     private ActivityResultLauncher<Intent> btActivityResultLauncher;
     private ActivityResultLauncher<String> btRequestPermission;
-    BluetoothAdapter bluetoothAdapter;
 
     // Settings
     private SharedPreferences sharedPreferences;
     private boolean shouldDisableAnimation;
-    private boolean shouldAutoConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
         startAsyncAnimation();
 
         appBarLayout = binding.appbarLayout;
-        toolbar = binding.toolbar;
         setSupportActionBar(binding.toolbar);
 
         BottomNavigationView navView = binding.bottomNavMenu;
@@ -103,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
         registerBTActivity();
         registerBTPermissionRequest();
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         autoConnect();
     }
@@ -122,8 +111,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
         getMenuInflater().inflate(R.menu.main, menu);
         this.menu = menu;
+        String bluetoothState = BluetoothUtils.getBluetoothState(Boolean.TRUE.equals(bluetoothViewModel.isConnected().getValue()));
+        menu.findItem(R.id.bluetoothStatus).setTitle(bluetoothState);
         return true;
     }
 
@@ -163,12 +155,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
             return;
         }
 
-        if (bluetoothAdapter == null) {
+        if (BluetoothUtils.getDefaultBluetoothAdapter() == null) {
             Log.e(BTAG, "bluetooth adapter not available");
             return;
         }
 
-        if (!bluetoothAdapter.isEnabled()) {
+        if (!BluetoothUtils.getDefaultBluetoothAdapter().isEnabled()) {
             Log.e(BTAG, "bluetooth adapter not enabled");
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             btActivityResultLauncher.launch(enableBtIntent);
@@ -186,7 +178,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
             return;
         }
 
-        showSelectionDialog(bluetoothAdapter.getBondedDevices());
+        boolean shouldUseHardCodedConnection = sharedPreferences.getBoolean("hardCodedConnection", false);
+        if(shouldUseHardCodedConnection){
+            String hardCodedDevice = sharedPreferences.getString("hardCodedDevice", "00:00:00:00:00:00");
+            boolean validBluetoothAddress = BluetoothAdapter.checkBluetoothAddress(hardCodedDevice);
+            if(validBluetoothAddress){
+                BluetoothDevice testDevice = BluetoothUtils.getDefaultBluetoothAdapter().getRemoteDevice(hardCodedDevice);
+                bluetoothViewModel.connect(testDevice);
+            } else {
+                BluetoothUtils.invalidBluetoothAddressToast(this);
+            }
+        } else {
+            showSelectionDialog(BluetoothUtils.getDefaultBluetoothAdapter().getBondedDevices());
+        }
     }
 
     private void showSelectionDialog(Set<BluetoothDevice> pairedDevices) {
@@ -214,8 +218,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
     }
 
     private void autoConnect() {
-        shouldAutoConnect = sharedPreferences.getBoolean("autoConnect", false);
+        boolean shouldAutoConnect = sharedPreferences.getBoolean("autoConnect", false);
         if(shouldAutoConnect && BluetoothUtils.isBluetoothPermissionGranted(this)){
+            boolean hardCodedConnection = sharedPreferences.getBoolean("hardCodedConnection", false);
+            if(hardCodedConnection) {
+                connectToBluetooth();
+                return;
+            }
+
             String autoConnectDevice = sharedPreferences.getString("preferredDevice", null);
             if(autoConnectDevice != null) {
                 BluetoothDevice selectedDevice = BluetoothUtils.findBluetoothDevice(autoConnectDevice);

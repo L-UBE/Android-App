@@ -22,11 +22,15 @@ import es.dmoral.toasty.Toasty;
 
 public class BluetoothUtils {
 
-    public final static UUID UUID_UART = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
+    public final static UUID UUID_UART = UUID.fromString("0199fe27-ba28-43d9-a553-f501be4940fd");
 
-    private final static UUID UUID_Read = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
+    private final static UUID UUID_WRITE = UUID.fromString("6ab4f1d6-ee33-4f6f-a5d2-6b0d48a58b71");
 
-    private final static UUID UUID_Write = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
+    private final static UUID UUID_NOTIFY = UUID.fromString("36e87c98-abc8-4d87-9f62-057968bc53e7");
+
+    private final static String defaultBluetoothAddress = "80:4B:50:56:91:5D";
+
+    private final static BluetoothAdapter defaultBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
     public static boolean isBluetoothPermissionGranted(@NonNull final Context context) {
         if (isSorAbove())
@@ -40,7 +44,7 @@ public class BluetoothUtils {
 
     @SuppressLint("MissingPermission")
     public static List<BluetoothDevice> getBondedDevices() {
-        return new ArrayList<>(BluetoothAdapter.getDefaultAdapter().getBondedDevices());
+        return new ArrayList<>(defaultBluetoothAdapter.getBondedDevices());
     }
 
     @SuppressLint("MissingPermission")
@@ -82,12 +86,20 @@ public class BluetoothUtils {
         return UUID_UART;
     }
 
-    public static UUID getUuidRead() {
-        return UUID_Read;
+    public static UUID getUuidNotify() {
+        return UUID_NOTIFY;
     }
 
     public static UUID getUuidWrite() {
-        return UUID_Write;
+        return UUID_WRITE;
+    }
+
+    public static String getDefaultBluetoothAddress() {
+        return defaultBluetoothAddress;
+    }
+
+    public static BluetoothAdapter getDefaultBluetoothAdapter() {
+        return defaultBluetoothAdapter;
     }
 
     public static String getBluetoothState(boolean isConnected) {
@@ -106,6 +118,11 @@ public class BluetoothUtils {
 
     public static void noBluetoothDeviceConnectedToast(Context context){
         String failMsg = "No Bluetooth Device connected";
+        bluetoothErrorToast(context, failMsg);
+    }
+
+    public static void invalidBluetoothAddressToast(Context context){
+        String failMsg = "Hard-Coded Bluetooth Device is invalid";
         bluetoothErrorToast(context, failMsg);
     }
 

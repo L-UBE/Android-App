@@ -5,13 +5,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GestureDetectorCompat;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import com.example.l3d_cube.databinding.FragmentGestureBinding;
 import com.example.l3d_cube.gesture.GestureUtils;

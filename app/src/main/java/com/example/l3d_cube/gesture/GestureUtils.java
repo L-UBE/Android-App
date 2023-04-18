@@ -11,7 +11,7 @@ import es.dmoral.toasty.Toasty;
 public class GestureUtils {
     private static final int vThreshold = 2000;
     private static int scrollCounter = 0;
-    private static final int scrollLimiter = 4;
+    private static final int scrollLimiter = 0;
 
     private static float scrollstartX1;
     private static float scrollStartY1;

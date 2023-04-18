@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -35,10 +36,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         boolean isBluetoothPermissionGranted = BluetoothUtils.isBluetoothPermissionGranted(context);
         if(isBluetoothPermissionGranted) {
+            SwitchPreference hardCodedConnection = findPreference("hardCodedConnection");
             SwitchPreference autoConnect = findPreference("autoConnect");
+            EditTextPreference hardCodedDevice = findPreference("hardCodedDevice");
             ListPreference preferredDevice = findPreference("preferredDevice");
 
+            hardCodedConnection.setVisible(true);
             autoConnect.setVisible(true);
+
+            hardCodedDevice.setVisible(sharedPreferences.getBoolean("hardCodedConnection", false));
+
+            hardCodedConnection.setOnPreferenceChangeListener((preference, value) -> {
+                hardCodedDevice.setVisible((boolean) value);
+                return true;
+            });
 
             List<String> bondedDevices = BluetoothUtils.getBluetoothNames(BluetoothUtils.getBondedDevices());
             CharSequence[] devices = bondedDevices.toArray(new CharSequence[bondedDevices.size()]);

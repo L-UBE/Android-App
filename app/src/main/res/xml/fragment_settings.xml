@@ -3,15 +3,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
+        app:key="hardCodedConnection"
+        app:title="Hard-Coded Connection"
+        app:summary="Enable Hard-Coded Bluetooth Device Connection"
+        app:isPreferenceVisible="false"/>
+
+    <SwitchPreference
         app:key="autoConnect"
         app:title="Auto-Connect"
-        app:summary="Automatically Connect to Bluetooth Device on Startup"
+        app:summary="Automatically Connect to Hard-Coded >/ Preferred Bluetooth Device on Startup"
+        app:isPreferenceVisible="false"/>
+
+    <EditTextPreference
+        app:key="hardCodedDevice"
+        app:title="Hard-Coded Device"
+        app:summary="Hard-Coded Bluetooth Device"
         app:isPreferenceVisible="false"/>
 
     <ListPreference
         app:key="preferredDevice"
         app:title="Preferred Device"
-        app:summary="Preferred Bluetooth Device"
+        app:summary="Preferred Bonded Bluetooth Device"
         app:isPreferenceVisible="false"/>
 
     <SwitchPreference

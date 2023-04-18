@@ -1,4 +1,4 @@
-package com.example.l3d_cube.bluetooth;
+package com.example.l3d_cube.bluetooth.Client;
 
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -8,14 +8,13 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import java.util.Arrays;
-import java.util.Random;
+import com.example.l3d_cube.bluetooth.BluetoothUtils;
 
 import no.nordicsemi.android.ble.livedata.ObservableBleManager;
 
 public class BluetoothDeviceManager extends ObservableBleManager {
 
-    private BluetoothGattCharacteristic readCharacteristic, writeCharacteristic;
+    private BluetoothGattCharacteristic writeCharacteristic, notifyCharacteristic;
     private boolean supported;
 
     public final MutableLiveData<Boolean> isDeviceConnected = new MutableLiveData<>();
@@ -50,17 +49,17 @@ public class BluetoothDeviceManager extends ObservableBleManager {
         protected boolean isRequiredServiceSupported(@NonNull BluetoothGatt gatt) {
             final BluetoothGattService service = gatt.getService(BluetoothUtils.getUuidUart());
             if (service != null) {
-                readCharacteristic = service.getCharacteristic(BluetoothUtils.getUuidRead());
                 writeCharacteristic = service.getCharacteristic(BluetoothUtils.getUuidWrite());
+                notifyCharacteristic = service.getCharacteristic(BluetoothUtils.getUuidNotify());
             }
-            supported = readCharacteristic != null && writeCharacteristic != null;
+            supported = writeCharacteristic != null && notifyCharacteristic != null;
             return supported;
         }
 
         @Override
         protected void onServicesInvalidated() {
             writeCharacteristic = null;
-            readCharacteristic = null;
+            notifyCharacteristic = null;
             if(Boolean.TRUE.equals(isDeviceConnected.getValue())){
                 isDeviceConnected.setValue(false);
             }
@@ -76,7 +75,7 @@ public class BluetoothDeviceManager extends ObservableBleManager {
         writeCharacteristic(
                 writeCharacteristic,
                 data,
-                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
         ).enqueue();
     }
 }

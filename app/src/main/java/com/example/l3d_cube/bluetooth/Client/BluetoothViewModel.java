@@ -1,23 +1,16 @@
-package com.example.l3d_cube.bluetooth;
+package com.example.l3d_cube.bluetooth.Client;
 
-import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG;
-
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.example.l3d_cube.R;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.l3d_cube.bluetooth.BluetoothUtils;
+import com.example.l3d_cube.bluetooth.Client.BluetoothDeviceManager;
 
-import es.dmoral.toasty.Toasty;
 import no.nordicsemi.android.ble.ConnectRequest;
 import no.nordicsemi.android.ble.PhyRequest;
 
