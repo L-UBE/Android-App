@@ -1,4 +1,4 @@
-package com.example.l3d_cube.bluetooth.Client;
+package com.example.l3d_cube.bluetooth.SMG;
 
 import android.app.Application;
 import android.bluetooth.BluetoothDevice;
@@ -6,34 +6,39 @@ import android.bluetooth.BluetoothDevice;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.l3d_cube.bluetooth.BluetoothUtils;
-import com.example.l3d_cube.bluetooth.Client.BluetoothDeviceManager;
+import com.example.l3d_cube.bluetooth.SMG.BluetoothSMGManager;
 
 import no.nordicsemi.android.ble.ConnectRequest;
 import no.nordicsemi.android.ble.PhyRequest;
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
+import no.nordicsemi.android.ble.data.Data;
 
-public class BluetoothViewModel extends AndroidViewModel {
-    private final BluetoothDeviceManager bluetoothDeviceManager;
+public class BluetoothSMGViewModel extends AndroidViewModel {
+    private final BluetoothSMGManager bluetoothSMGManager;
+
     @Nullable
     private ConnectRequest connectRequest;
+
     private BluetoothDevice device;
 
 
-    public BluetoothViewModel(@NonNull Application application) {
+    public BluetoothSMGViewModel(@NonNull Application application) {
         super(application);
-        bluetoothDeviceManager = new BluetoothDeviceManager(getApplication());
+        bluetoothSMGManager = new BluetoothSMGManager(application);
+
     }
 
     public void connect(@NonNull final BluetoothDevice target) {
         device = target;
-        connectRequest = bluetoothDeviceManager.connect(device)
+        connectRequest = bluetoothSMGManager.connect(device)
                 .useAutoConnect(false)
                 .usePreferredPhy(PhyRequest.PHY_LE_2M_MASK)
                 .then(d -> connectRequest = null)
                 .done(d -> {
-                    bluetoothDeviceManager.setIsDeviceConnected(true);
+                    bluetoothSMGManager.setIsDeviceConnected(true);
                 })
                 .fail((d, s) -> {
                     BluetoothUtils.bluetoothConnectToastFail(getApplication());
@@ -41,22 +46,27 @@ public class BluetoothViewModel extends AndroidViewModel {
         connectRequest.enqueue();
     }
 
+
     public void disconnect() {
         device = null;
         if (connectRequest != null) {
             connectRequest.cancelPendingConnection();
-        } else if (bluetoothDeviceManager.isConnected()) {
-            bluetoothDeviceManager.disconnect().enqueue();
+        } else if (bluetoothSMGManager.isConnected()) {
+            bluetoothSMGManager.disconnect().enqueue();
         }
-        bluetoothDeviceManager.setIsDeviceConnected(false);
+        bluetoothSMGManager.setIsDeviceConnected(false);
     }
 
     public void write(byte[] data){
-        bluetoothDeviceManager.write(data);
+        bluetoothSMGManager.write(data);
     }
 
-    public LiveData<Boolean> isConnected() {
-        return bluetoothDeviceManager.isDeviceConnected;
+    public Boolean isConnected() {
+        return Boolean.TRUE.equals(bluetoothSMGManager.isDeviceConnected.getValue());
+    }
+
+    public MutableLiveData<Boolean> connectionStatus() {
+        return bluetoothSMGManager.isDeviceConnected;
     }
 
 }

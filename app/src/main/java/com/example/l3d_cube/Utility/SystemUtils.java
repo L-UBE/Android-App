@@ -1,9 +1,11 @@
-package com.example.l3d_cube;
+package com.example.l3d_cube.Utility;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
+
+import com.example.l3d_cube.R;
 
 import es.dmoral.toasty.Toasty;
 

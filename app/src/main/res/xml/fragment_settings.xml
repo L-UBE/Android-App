@@ -15,15 +15,27 @@
         app:isPreferenceVisible="false"/>
 
     <EditTextPreference
-        app:key="hardCodedDevice"
-        app:title="Hard-Coded Device"
-        app:summary="Hard-Coded Bluetooth Device"
+        app:key="hardCodedDeviceMCU"
+        app:title="Hard-Coded Cube Device"
+        app:summary="Hard-Coded Cube Bluetooth Device"
+        app:isPreferenceVisible="false"/>
+
+    <EditTextPreference
+        app:key="hardCodedDeviceSMG"
+        app:title="Hard-Coded Smart-Glove Device"
+        app:summary="Hard-Coded Smart-Glove Bluetooth Device"
         app:isPreferenceVisible="false"/>
 
     <ListPreference
-        app:key="preferredDevice"
-        app:title="Preferred Device"
-        app:summary="Preferred Bonded Bluetooth Device"
+        app:key="preferredDeviceMCU"
+        app:title="Preferred Cube Device"
+        app:summary="Preferred Bonded Cube Bluetooth Device"
+        app:isPreferenceVisible="false"/>
+
+    <ListPreference
+        app:key="preferredDeviceSMG"
+        app:title="Preferred Smart-Glove Device"
+        app:summary="Preferred Bonded Smart-Glove Bluetooth Device"
         app:isPreferenceVisible="false"/>
 
     <SwitchPreference

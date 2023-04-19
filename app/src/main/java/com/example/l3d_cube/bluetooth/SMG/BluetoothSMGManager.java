@@ -1,5 +1,6 @@
-package com.example.l3d_cube.bluetooth.Client;
+package com.example.l3d_cube.bluetooth.SMG;
 
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -9,24 +10,29 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.l3d_cube.bluetooth.BluetoothUtils;
+import com.example.l3d_cube.ui.FragmentDataTransfer;
 
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
+import no.nordicsemi.android.ble.data.Data;
 import no.nordicsemi.android.ble.livedata.ObservableBleManager;
 
-public class BluetoothDeviceManager extends ObservableBleManager {
+public class BluetoothSMGManager extends ObservableBleManager {
 
-    private BluetoothGattCharacteristic writeCharacteristic, notifyCharacteristic;
-    private boolean supported;
+    private BluetoothGattCharacteristic writeCharacteristic;
+    private BluetoothGattCharacteristic notifyCharacteristic;
+
+    private boolean isSupported;
 
     public final MutableLiveData<Boolean> isDeviceConnected = new MutableLiveData<>();
+
+    FragmentDataTransfer fragmentDataTransfer;
+    ProfileDataCallback notifcationCallback;
 
     public void setIsDeviceConnected(boolean isDeviceConnected) {
         this.isDeviceConnected.setValue(isDeviceConnected);
     }
 
-
-    public BluetoothDeviceManager(@NonNull final Context context) {
-        super(context);
-    }
+    public BluetoothSMGManager(@NonNull final Context context) { super(context); }
 
     @NonNull
     @Override
@@ -37,12 +43,9 @@ public class BluetoothDeviceManager extends ObservableBleManager {
     private class BluetoothDeviceManagerGattCallback extends BleManagerGattCallback {
         @Override
         protected void initialize() {
-            // Initialize your device.
-            // This means e.g. enabling notifications, setting notification callbacks,
-            // sometimes writing something to some Control Point.
-            // Kotlin projects should not use suspend methods here, which require a scope.
-            requestMtu(517)
-                    .enqueue();
+            requestMtu(517).enqueue();
+            setNotificationCallback(notifyCharacteristic).with(notifcationCallback);
+            enableNotifications(notifyCharacteristic).enqueue();
         }
 
         @Override
@@ -52,8 +55,8 @@ public class BluetoothDeviceManager extends ObservableBleManager {
                 writeCharacteristic = service.getCharacteristic(BluetoothUtils.getUuidWrite());
                 notifyCharacteristic = service.getCharacteristic(BluetoothUtils.getUuidNotify());
             }
-            supported = writeCharacteristic != null && notifyCharacteristic != null;
-            return supported;
+            isSupported = writeCharacteristic != null && notifyCharacteristic != null;
+            return isSupported;
         }
 
         @Override
@@ -67,11 +70,9 @@ public class BluetoothDeviceManager extends ObservableBleManager {
     }
 
     public void write(byte[] data){
-
         if(writeCharacteristic == null){
             return;
         }
-
         writeCharacteristic(
                 writeCharacteristic,
                 data,

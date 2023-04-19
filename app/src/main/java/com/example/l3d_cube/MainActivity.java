@@ -16,8 +16,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.l3d_cube.bluetooth.SMG.BluetoothSMGViewModel;
 import com.example.l3d_cube.bluetooth.BluetoothUtils;
-import com.example.l3d_cube.bluetooth.Client.BluetoothViewModel;
+import com.example.l3d_cube.bluetooth.MCU.BluetoothMCUViewModel;
 import com.example.l3d_cube.ui.FragmentDataTransfer;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -41,7 +42,8 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity implements FragmentDataTransfer {
 
     private ActivityMainBinding binding;
-    private BluetoothViewModel bluetoothViewModel;
+    private BluetoothMCUViewModel bluetoothMCUViewModel;
+    private BluetoothSMGViewModel bluetoothSMGViewModel;
 
     // Animation Variables
     private LottieAnimationView animationView;
@@ -82,14 +84,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        // Configure the view model.
-        bluetoothViewModel = new ViewModelProvider(this).get(BluetoothViewModel.class);
+        bluetoothMCUViewModel = new ViewModelProvider(this).get(BluetoothMCUViewModel.class);
 
-        bluetoothViewModel.isConnected().observe(this, isConnected -> {
-            String bluetoothState = BluetoothUtils.getBluetoothState(isConnected);
-            BluetoothUtils.bluetoothConnectToast(this, isConnected);
+        bluetoothMCUViewModel.connectionStatus().observe(this, connectionStatus -> {
+            String bluetoothState = BluetoothUtils.getBluetoothState(connectionStatus);
+            BluetoothUtils.bluetoothConnectToast(this, connectionStatus);
             menu.findItem(R.id.bluetoothStatus).setTitle(bluetoothState);
         });
+
+        bluetoothSMGViewModel = new ViewModelProvider(this).get(BluetoothSMGViewModel.class);
 
         registerBTActivity();
         registerBTPermissionRequest();
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
         menu.clear();
         getMenuInflater().inflate(R.menu.main, menu);
         this.menu = menu;
-        String bluetoothState = BluetoothUtils.getBluetoothState(Boolean.TRUE.equals(bluetoothViewModel.isConnected().getValue()));
+        String bluetoothState = BluetoothUtils.getBluetoothState(bluetoothMCUViewModel.isConnected());
         menu.findItem(R.id.bluetoothStatus).setTitle(bluetoothState);
         return true;
     }
@@ -150,8 +153,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     @SuppressLint("MissingPermission")
     public void connectToBluetooth() {
-        if(Boolean.TRUE.equals(bluetoothViewModel.isConnected().getValue())){
-            bluetoothViewModel.disconnect();
+        if(bluetoothMCUViewModel.isConnected()){
+            bluetoothMCUViewModel.disconnect();
+            bluetoothSMGViewModel.disconnect();
             return;
         }
 
@@ -180,11 +184,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
         boolean shouldUseHardCodedConnection = sharedPreferences.getBoolean("hardCodedConnection", false);
         if(shouldUseHardCodedConnection){
-            String hardCodedDevice = sharedPreferences.getString("hardCodedDevice", "00:00:00:00:00:00");
-            boolean validBluetoothAddress = BluetoothAdapter.checkBluetoothAddress(hardCodedDevice);
-            if(validBluetoothAddress){
-                BluetoothDevice testDevice = BluetoothUtils.getDefaultBluetoothAdapter().getRemoteDevice(hardCodedDevice);
-                bluetoothViewModel.connect(testDevice);
+            String hardCodedMCUAddress = sharedPreferences.getString("hardCodedDeviceMCU", "");
+            boolean validMCUBluetoothAddress = BluetoothAdapter.checkBluetoothAddress(hardCodedMCUAddress);
+            if(validMCUBluetoothAddress){
+                BluetoothDevice hardCodedDeviceMCU = BluetoothUtils.getDefaultBluetoothAdapter().getRemoteDevice(hardCodedMCUAddress);
+                bluetoothMCUViewModel.connect(hardCodedDeviceMCU);
+            } else {
+                BluetoothUtils.invalidBluetoothAddressToast(this);
+            }
+
+            String hardCodedSMGAddress = sharedPreferences.getString("hardCodedDeviceSMG", "");
+            boolean validSMGBluetoothAddress = BluetoothAdapter.checkBluetoothAddress(hardCodedSMGAddress);
+            if(validSMGBluetoothAddress){
+                BluetoothDevice hardCodedDeviceSMG = BluetoothUtils.getDefaultBluetoothAdapter().getRemoteDevice(hardCodedSMGAddress);
+                bluetoothSMGViewModel.connect(hardCodedDeviceSMG);
             } else {
                 BluetoothUtils.invalidBluetoothAddressToast(this);
             }
@@ -211,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
                             .getListView()
                             .getCheckedItemPosition();
                     BluetoothDevice selectedDevice = devices.get(position);
-                    bluetoothViewModel.connect(selectedDevice);
+                    bluetoothMCUViewModel.connect(selectedDevice);
                 });
         alertDialog.setTitle("Select a Bluetooth Module");
         alertDialog.show();
@@ -230,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
             if(autoConnectDevice != null) {
                 BluetoothDevice selectedDevice = BluetoothUtils.findBluetoothDevice(autoConnectDevice);
                 if(selectedDevice != null) {
-                    bluetoothViewModel.connect(selectedDevice);
+                    bluetoothMCUViewModel.connect(selectedDevice);
                     return;
                 }
             }
@@ -238,14 +251,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
         }
     }
 
-    public BluetoothViewModel getBluetoothViewModel(){
-        return bluetoothViewModel;
+    public BluetoothMCUViewModel getBluetoothViewModel(){
+        return bluetoothMCUViewModel;
     }
 
     @Override
     public void fragmentToBluetooth(String data) {
-        if(Boolean.TRUE.equals(bluetoothViewModel.isConnected().getValue())){
-            bluetoothViewModel.write(data.getBytes());
+        if(bluetoothMCUViewModel.isConnected()){
+            bluetoothMCUViewModel.write(data.getBytes());
         } else {
             BluetoothUtils.noBluetoothDeviceConnectedToast(this);
         }
@@ -253,8 +266,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     @Override
     public void fragmentToBluetooth(byte[] data) {
-        if(Boolean.TRUE.equals(bluetoothViewModel.isConnected().getValue())){
-            bluetoothViewModel.write(data);
+        if(bluetoothMCUViewModel.isConnected()){
+            bluetoothMCUViewModel.write(data);
         } else {
             BluetoothUtils.noBluetoothDeviceConnectedToast(this);
         }

@@ -5,9 +5,6 @@ import static com.scichart.core.utility.Dispatcher.runOnUiThread;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,15 +12,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.MenuHost;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
 
-import com.example.l3d_cube.ArrayUtils;
-import com.example.l3d_cube.R;
-import com.example.l3d_cube.SystemUtils;
+import com.example.l3d_cube.Utility.ArrayUtils;
+import com.example.l3d_cube.Utility.SystemUtils;
 import com.example.l3d_cube.databinding.FragmentMathBinding;
 
 import org.mariuszgromada.math.mxparser.Argument;

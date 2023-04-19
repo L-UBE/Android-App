@@ -13,7 +13,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.example.l3d_cube.R;
-import com.example.l3d_cube.SystemUtils;
+import com.example.l3d_cube.Utility.SystemUtils;
 import com.example.l3d_cube.bluetooth.BluetoothUtils;
 
 import java.util.List;
@@ -38,28 +38,39 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if(isBluetoothPermissionGranted) {
             SwitchPreference hardCodedConnection = findPreference("hardCodedConnection");
             SwitchPreference autoConnect = findPreference("autoConnect");
-            EditTextPreference hardCodedDevice = findPreference("hardCodedDevice");
-            ListPreference preferredDevice = findPreference("preferredDevice");
+            EditTextPreference hardCodedDeviceMCU = findPreference("hardCodedDeviceMCU");
+            EditTextPreference hardCodedDeviceSMG = findPreference("hardCodedDeviceSMG");
+            ListPreference preferredDeviceMCU = findPreference("preferredDeviceMCU");
+            ListPreference preferredDeviceSMG = findPreference("preferredDeviceSMG");
 
             hardCodedConnection.setVisible(true);
             autoConnect.setVisible(true);
 
-            hardCodedDevice.setVisible(sharedPreferences.getBoolean("hardCodedConnection", false));
+            hardCodedDeviceMCU.setVisible(sharedPreferences.getBoolean("hardCodedConnection", false));
+            hardCodedDeviceSMG.setVisible(sharedPreferences.getBoolean("hardCodedConnection", false));
 
             hardCodedConnection.setOnPreferenceChangeListener((preference, value) -> {
-                hardCodedDevice.setVisible((boolean) value);
+                hardCodedDeviceMCU.setVisible((boolean) value);
+                hardCodedDeviceSMG.setVisible((boolean) value);
                 return true;
             });
 
             List<String> bondedDevices = BluetoothUtils.getBluetoothNames(BluetoothUtils.getBondedDevices());
             CharSequence[] devices = bondedDevices.toArray(new CharSequence[bondedDevices.size()]);
-            preferredDevice.setEntries(devices);
-            preferredDevice.setEntryValues(devices);
 
-            preferredDevice.setVisible(sharedPreferences.getBoolean("autoConnect", false));
+            preferredDeviceMCU.setEntries(devices);
+            preferredDeviceMCU.setEntryValues(devices);
+
+            preferredDeviceMCU.setVisible(sharedPreferences.getBoolean("autoConnect", false));
+
+            preferredDeviceSMG.setEntries(devices);
+            preferredDeviceSMG.setEntryValues(devices);
+
+            preferredDeviceSMG.setVisible(sharedPreferences.getBoolean("autoConnect", false));
 
             autoConnect.setOnPreferenceChangeListener((preference, value) -> {
-                preferredDevice.setVisible((boolean) value);
+                preferredDeviceMCU.setVisible((boolean) value);
+                preferredDeviceSMG.setVisible((boolean) value);
                 return true;
             });
         }

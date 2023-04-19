@@ -1,4 +1,4 @@
-package com.example.l3d_cube;
+package com.example.l3d_cube.Utility;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
