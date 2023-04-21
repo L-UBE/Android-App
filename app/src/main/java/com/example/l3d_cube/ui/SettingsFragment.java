@@ -14,7 +14,7 @@ import androidx.preference.SwitchPreference;
 
 import com.example.l3d_cube.R;
 import com.example.l3d_cube.Utility.SystemUtils;
-import com.example.l3d_cube.bluetooth.BluetoothUtils;
+import com.example.l3d_cube.bluetooth.Utility.BluetoothSystemUtils;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        boolean isBluetoothPermissionGranted = BluetoothUtils.isBluetoothPermissionGranted(context);
+        boolean isBluetoothPermissionGranted = BluetoothSystemUtils.isBluetoothPermissionGranted(context);
         if(isBluetoothPermissionGranted) {
             SwitchPreference hardCodedConnection = findPreference("hardCodedConnection");
             SwitchPreference autoConnect = findPreference("autoConnect");
@@ -55,7 +55,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             });
 
-            List<String> bondedDevices = BluetoothUtils.getBluetoothNames(BluetoothUtils.getBondedDevices());
+            List<String> bondedDevices = BluetoothSystemUtils.getBluetoothNames(BluetoothSystemUtils.getBondedDevices());
             CharSequence[] devices = bondedDevices.toArray(new CharSequence[bondedDevices.size()]);
 
             preferredDeviceMCU.setEntries(devices);

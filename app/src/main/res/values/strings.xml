@@ -5,6 +5,11 @@
     <string name="title_upload">Upload</string>
     <string name="title_settings">Settings</string>
 
+    <string name="MCU">MCU</string>
     <string name="bluetooth_connection">Disconnected</string>
     <string name="bluetooth_settings">bluetooth</string>
+
+    <string name="SMG">SMG</string>
+    <string name="SMGConnectionStatus">Disconnected</string>
+    <string name="SMGConnect">SMGConnect</string>
 </resources>

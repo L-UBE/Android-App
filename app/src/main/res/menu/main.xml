@@ -3,13 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/bluetoothStatus"
+        android:id="@+id/SMGItemTag"
+        android:title="@string/SMG"
+        android:enabled="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/SMGConnectionStatus"
+        android:title="@string/SMGConnectionStatus"
+        android:enabled="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/SMGConnect"
+        android:title="@string/SMGConnect"
+        android:icon="@drawable/bluetooth_settings"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/padding"
+        android:title=""
+        android:enabled="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/MCUItemTag"
+        android:title="@string/MCU"
+        android:enabled="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/MCUConnectionStatus"
         android:title="@string/bluetooth_connection"
-        app:showAsAction="ifRoom" />
+        android:enabled="false"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/bluetoothSettings"
         android:title="@string/bluetooth_settings"
         android:icon="@drawable/bluetooth_settings"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>

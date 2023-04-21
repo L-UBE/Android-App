@@ -1,14 +1,16 @@
-package com.example.l3d_cube.bluetooth;
+package com.example.l3d_cube.bluetooth.Utility;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
@@ -20,15 +22,14 @@ import java.util.UUID;
 
 import es.dmoral.toasty.Toasty;
 
-public class BluetoothUtils {
+public class BluetoothSystemUtils {
 
-    public final static UUID UUID_UART = UUID.fromString("0199fe27-ba28-43d9-a553-f501be4940fd");
+    public static ActivityResultLauncher<Intent> btActivityResultLauncher;
+    public static ActivityResultLauncher<String> btRequestPermission;
 
+    private final static UUID UUID_UART = UUID.fromString("0199fe27-ba28-43d9-a553-f501be4940fd");
     private final static UUID UUID_WRITE = UUID.fromString("6ab4f1d6-ee33-4f6f-a5d2-6b0d48a58b71");
-
     private final static UUID UUID_NOTIFY = UUID.fromString("36e87c98-abc8-4d87-9f62-057968bc53e7");
-
-    private final static String defaultBluetoothAddress = "80:4B:50:56:91:5D";
 
     private final static BluetoothAdapter defaultBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -78,6 +79,30 @@ public class BluetoothUtils {
         return null;
     }
 
+    public static boolean checkBluetoothConnectionRequirements(Context context) {
+        if (getDefaultBluetoothAdapter() == null) {
+            return false;
+        }
+
+        if (!getDefaultBluetoothAdapter().isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            btActivityResultLauncher.launch(enableBtIntent);
+            return false;
+        }
+
+        if(!isBluetoothPermissionGranted(context)){
+            if(isSorAbove()) {
+                btRequestPermission.launch(Manifest.permission.BLUETOOTH_CONNECT);
+            }
+            else{
+                btRequestPermission.launch(Manifest.permission.BLUETOOTH);
+            }
+            return false;
+        }
+
+        return true;
+    }
+
     public static boolean isSorAbove() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
@@ -92,10 +117,6 @@ public class BluetoothUtils {
 
     public static UUID getUuidWrite() {
         return UUID_WRITE;
-    }
-
-    public static String getDefaultBluetoothAddress() {
-        return defaultBluetoothAddress;
     }
 
     public static BluetoothAdapter getDefaultBluetoothAdapter() {

@@ -1,7 +1,5 @@
 package com.example.l3d_cube.bluetooth.SMG;
 
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
@@ -9,24 +7,18 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.l3d_cube.bluetooth.BluetoothUtils;
-import com.example.l3d_cube.ui.FragmentDataTransfer;
+import com.example.l3d_cube.bluetooth.BluetoothManager;
+import com.example.l3d_cube.bluetooth.Utility.BluetoothSystemUtils;
 
 import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
-import no.nordicsemi.android.ble.data.Data;
-import no.nordicsemi.android.ble.livedata.ObservableBleManager;
 
-public class BluetoothSMGManager extends ObservableBleManager {
+public class BluetoothSMGManager extends BluetoothManager {
 
-    private BluetoothGattCharacteristic writeCharacteristic;
     private BluetoothGattCharacteristic notifyCharacteristic;
 
-    private boolean isSupported;
+    public final MutableLiveData<byte[]> incomingData = new MutableLiveData<>();
 
-    public final MutableLiveData<Boolean> isDeviceConnected = new MutableLiveData<>();
-
-    FragmentDataTransfer fragmentDataTransfer;
-    ProfileDataCallback notifcationCallback;
+    private final ProfileDataCallback incomingBluetoothData = (device, data) -> this.incomingData.setValue(data.getValue());
 
     public void setIsDeviceConnected(boolean isDeviceConnected) {
         this.isDeviceConnected.setValue(isDeviceConnected);
@@ -34,49 +26,20 @@ public class BluetoothSMGManager extends ObservableBleManager {
 
     public BluetoothSMGManager(@NonNull final Context context) { super(context); }
 
-    @NonNull
     @Override
-    protected BleManagerGattCallback getGattCallback() {
-        return new BluetoothDeviceManagerGattCallback();
+    protected void initialization() {
+        setNotificationCallback(notifyCharacteristic).with(incomingBluetoothData);
+        enableNotifications(notifyCharacteristic).enqueue();
     }
 
-    private class BluetoothDeviceManagerGattCallback extends BleManagerGattCallback {
-        @Override
-        protected void initialize() {
-            requestMtu(517).enqueue();
-            setNotificationCallback(notifyCharacteristic).with(notifcationCallback);
-            enableNotifications(notifyCharacteristic).enqueue();
-        }
-
-        @Override
-        protected boolean isRequiredServiceSupported(@NonNull BluetoothGatt gatt) {
-            final BluetoothGattService service = gatt.getService(BluetoothUtils.getUuidUart());
-            if (service != null) {
-                writeCharacteristic = service.getCharacteristic(BluetoothUtils.getUuidWrite());
-                notifyCharacteristic = service.getCharacteristic(BluetoothUtils.getUuidNotify());
-            }
-            isSupported = writeCharacteristic != null && notifyCharacteristic != null;
-            return isSupported;
-        }
-
-        @Override
-        protected void onServicesInvalidated() {
-            writeCharacteristic = null;
-            notifyCharacteristic = null;
-            if(Boolean.TRUE.equals(isDeviceConnected.getValue())){
-                isDeviceConnected.setValue(false);
-            }
-        }
+    @Override
+    protected void invalidateServices() {
+        notifyCharacteristic = null;
     }
 
-    public void write(byte[] data){
-        if(writeCharacteristic == null){
-            return;
-        }
-        writeCharacteristic(
-                writeCharacteristic,
-                data,
-                BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
-        ).enqueue();
+    @Override
+    protected boolean isSupported(@NonNull BluetoothGattService service) {
+        notifyCharacteristic = service.getCharacteristic(BluetoothSystemUtils.getUuidNotify());
+        return notifyCharacteristic != null;
     }
 }
