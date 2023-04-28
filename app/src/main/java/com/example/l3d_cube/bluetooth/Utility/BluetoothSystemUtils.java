@@ -33,7 +33,7 @@ public class BluetoothSystemUtils {
 
     private final static BluetoothAdapter defaultBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-    public static boolean isBluetoothPermissionGranted(@NonNull final Context context) {
+    public static boolean isBluetoothConnectPermissionGranted(@NonNull final Context context) {
         if (isSorAbove())
             return ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT)
                     == PackageManager.PERMISSION_GRANTED;
@@ -41,6 +41,23 @@ public class BluetoothSystemUtils {
             return ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH)
                     == PackageManager.PERMISSION_GRANTED;
         }
+    }
+
+    public static boolean isBluetoothScanPermissionGranted(Context context) {
+        if (isSorAbove()){
+            return ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN)
+                    == PackageManager.PERMISSION_GRANTED;
+        }
+        else{
+            return ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH)
+                    == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    public static boolean isBluetoothLocationPermissionGranted(Context context) {
+            return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED;
+
     }
 
     @SuppressLint("MissingPermission")
@@ -79,7 +96,7 @@ public class BluetoothSystemUtils {
         return null;
     }
 
-    public static boolean checkBluetoothConnectionRequirements(Context context) {
+    public static boolean checkBluetoothGeneralRequirements(Context context) {
         if (getDefaultBluetoothAdapter() == null) {
             return false;
         }
@@ -89,8 +106,11 @@ public class BluetoothSystemUtils {
             btActivityResultLauncher.launch(enableBtIntent);
             return false;
         }
+        return true;
+    }
 
-        if(!isBluetoothPermissionGranted(context)){
+    public static boolean checkBluetoothConnectionRequirements(Context context) {
+        if(!isBluetoothConnectPermissionGranted(context)){
             if(isSorAbove()) {
                 btRequestPermission.launch(Manifest.permission.BLUETOOTH_CONNECT);
             }
@@ -99,7 +119,24 @@ public class BluetoothSystemUtils {
             }
             return false;
         }
+        return true;
+    }
 
+    public static boolean checkBluetoothScanRequirements(Context context) {
+        if(!isBluetoothScanPermissionGranted(context)){
+            if(isSorAbove()) {
+                btRequestPermission.launch(Manifest.permission.BLUETOOTH_SCAN);
+            }
+            else{
+                btRequestPermission.launch(Manifest.permission.BLUETOOTH);
+            }
+            return false;
+        }
+
+        if(!isBluetoothLocationPermissionGranted(context)){
+            btRequestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+            return false;
+        }
         return true;
     }
 

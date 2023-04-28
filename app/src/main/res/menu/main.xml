@@ -39,7 +39,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/bluetoothSettings"
+        android:id="@+id/MCUConnect"
         android:title="@string/bluetooth_settings"
         android:icon="@drawable/bluetooth_settings"
         app:showAsAction="always" />

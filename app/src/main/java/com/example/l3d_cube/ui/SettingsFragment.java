@@ -34,7 +34,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        boolean isBluetoothPermissionGranted = BluetoothSystemUtils.isBluetoothPermissionGranted(context);
+        boolean isBluetoothPermissionGranted = BluetoothSystemUtils.isBluetoothConnectPermissionGranted(context);
         if(isBluetoothPermissionGranted) {
             SwitchPreference hardCodedConnection = findPreference("hardCodedConnection");
             SwitchPreference autoConnect = findPreference("autoConnect");

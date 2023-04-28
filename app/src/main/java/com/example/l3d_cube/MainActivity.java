@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
         NavigationUI.setupWithNavController(navView, navController);
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        mainViewModel.outgoingData.observe(this, outgoingData -> {
-            bluetoothMCUViewModel.write(outgoingData);
+        mainViewModel.refresh.observe(this, outgoingData -> {
+            bluetoothMCUViewModel.write(mainViewModel.outgoingModel);
         });
 
         bluetoothMCUViewModel = new ViewModelProvider(this).get(BluetoothMCUViewModel.class);
@@ -131,9 +131,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.bluetoothSettings) {
+        if (item.getItemId() == R.id.MCUConnect) {
             Log.i(BTAG, "button pressed");
             BluetoothConnectionUtils.connect(this, sharedPreferences, bluetoothMCUViewModel);
+        }
+        else if (item.getItemId() == R.id.SMGConnect) {
+            Log.i(BTAG, "button pressed");
+            BluetoothConnectionUtils.connect(this, sharedPreferences, bluetoothSMGViewModel);
         }
         return true;
     }
@@ -160,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
     private void autoConnect() {
         boolean shouldAutoConnect = sharedPreferences.getBoolean("autoConnect", false);
-        if(shouldAutoConnect && BluetoothSystemUtils.isBluetoothPermissionGranted(this)){
+        if(shouldAutoConnect && BluetoothSystemUtils.isBluetoothConnectPermissionGranted(this)){
             boolean hardCodedConnection = sharedPreferences.getBoolean("hardCodedConnection", false);
             if(hardCodedConnection) {
                 BluetoothConnectionUtils.connect(this, sharedPreferences, bluetoothMCUViewModel);
