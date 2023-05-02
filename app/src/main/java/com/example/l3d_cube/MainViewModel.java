@@ -6,12 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 import com.example.l3d_cube.Model.LED.LedMapping;
 import com.example.l3d_cube.bluetooth.Utility.BluetoothDataUtils;
 
 public class MainViewModel extends AndroidViewModel {
-    public final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
+    private Python py;
+    private PyObject transformation;
+    private int angle = 0;
 
+    public final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private byte[] model;
     public byte[] outgoingModel;
 
@@ -19,6 +24,10 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+
+        py = Python.getInstance();
+        transformation = py.getModule("rotation");
+
         Thread main = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -32,13 +41,20 @@ public class MainViewModel extends AndroidViewModel {
                 }
             }
         });
-        main.start();
+//        main.start();
     }
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
         model = BluetoothDataUtils.parseIncomingBluetoothData(incomingData);
         outgoingModel = LedMapping.mapLEDs(model);
+        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+    }
 
+    public void rotate(int angle) {
+        this.angle += angle;
+        model = transformation.callAttr("rotate", PyObject.fromJava(model), angle).toJava(byte[].class);
+        outgoingModel = LedMapping.mapLEDs(model);
+        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
     }
 
     private void setDelay(int delay) {

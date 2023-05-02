@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.example.l3d_cube.bluetooth.SMG.BluetoothSMGViewModel;
 import com.example.l3d_cube.bluetooth.Utility.BluetoothConnectionUtils;
 import com.example.l3d_cube.bluetooth.Utility.BluetoothSystemUtils;
@@ -65,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
 
         appBarLayout = binding.appbarLayout;
         setSupportActionBar(binding.toolbar);
+
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+        }
 
         BottomNavigationView navView = binding.bottomNavMenu;
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
