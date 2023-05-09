@@ -50,23 +50,32 @@ public class UploadFragment extends Fragment {
 
         ImageButton preset2 = binding.preset2;
         preset2.setOnClickListener(v -> {
-            byte[] testData = new byte[4096];
-            java.util.Arrays.fill(testData, 0, 2, (byte) 0x01);
-            mainViewModel.handleIncomingBluetoothData(testData);
+            Thread main = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for(int i = 0; i < 5; i++){
+                        byte[] testData = new byte[2048];
+                        java.util.Arrays.fill(testData, 0, 2048, (byte) 0xFF);
+                        mainViewModel.handleIncomingBluetoothData(testData);
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            main.start();
         });
 
         ImageButton preset3 = binding.preset3;
         preset3.setOnClickListener(v -> {
-            byte[] testData = new byte[4096];
-            java.util.Arrays.fill(testData, 0, 4096, (byte) 0x02);
-            mainViewModel.handleIncomingBluetoothData(testData);
+            mainViewModel.rotate(-5);
         });
 
         ImageButton preset4 = binding.preset4;
         preset4.setOnClickListener(v -> {
-            byte[] testData = new byte[4096];
-            java.util.Arrays.fill(testData, 0, 4096, (byte) 0x03);
-            mainViewModel.handleIncomingBluetoothData(testData);
+            mainViewModel.rotate(5);
         });
 
         ImageButton preset5 = binding.preset5;
@@ -81,7 +90,7 @@ public class UploadFragment extends Fragment {
 
         ImageButton preset7 = binding.preset7;
         preset7.setOnClickListener(v -> {
-            mainViewModel.handleIncomingBluetoothData(cylinder);
+            mainViewModel. handleIncomingBluetoothData(cylinder);
         });
 
         ImageButton preset8 = binding.preset8;

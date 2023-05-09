@@ -38,7 +38,7 @@ public class BluetoothMCUManager extends BluetoothManager {
         writeCharacteristic(
                 writeCharacteristic,
                 data,
-                BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
         ).split().enqueue();
     }
 }

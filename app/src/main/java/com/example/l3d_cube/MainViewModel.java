@@ -20,7 +20,7 @@ public class MainViewModel extends AndroidViewModel {
     private byte[] model;
     public byte[] outgoingModel;
 
-    private int delay = 500;
+    private int delay = 300;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -46,16 +46,13 @@ public class MainViewModel extends AndroidViewModel {
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
         model = incomingData;
-        //model = BluetoothDataUtils.parseIncomingBluetoothData(incomingData);
+//        model = BluetoothDataUtils.parseIncomingBluetoothData(incomingData);
         outgoingModel = LedMapping.mapLEDs(model);
-//        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
     }
 
     public void rotate(int angle) {
         this.angle += angle;
-        model = transformation.callAttr("rotate", PyObject.fromJava(model), angle).toJava(byte[].class);
-        outgoingModel = LedMapping.mapLEDs(model);
-        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+        outgoingModel = LedMapping.mapLEDs(transformation.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
     }
 
     private void setDelay(int delay) {

@@ -45,7 +45,7 @@ public class BluetoothConnectionUtils {
     }
 
     private static void handleHardCodedConnection(Context context, SharedPreferences sharedPreferences, BluetoothViewModel bluetoothViewModel) {
-        String hardCodedAddress = sharedPreferences.getString("hardCodedDevice" + bluetoothViewModel.getDeviceName(), "");
+        String hardCodedAddress = BluetoothSystemUtils.stringToAddress(sharedPreferences.getString("hardCodedDevice" + bluetoothViewModel.getDeviceName(), ""));
         boolean validBluetoothAddress = BluetoothAdapter.checkBluetoothAddress(hardCodedAddress);
         if (validBluetoothAddress) {
             BluetoothDevice hardCodedDevice = BluetoothSystemUtils.getDefaultBluetoothAdapter().getRemoteDevice(hardCodedAddress);

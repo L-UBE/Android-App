@@ -32,7 +32,7 @@ public abstract class BluetoothManager extends ObservableBleManager {
     private class BluetoothDeviceManagerGattCallback extends BleManagerGattCallback {
         @Override
         protected void initialize() {
-            requestMtu(250).enqueue();
+            requestMtu(517).enqueue();
             initialization();
         }
 

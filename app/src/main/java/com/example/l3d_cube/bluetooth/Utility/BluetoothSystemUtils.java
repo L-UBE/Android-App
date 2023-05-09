@@ -160,6 +160,10 @@ public class BluetoothSystemUtils {
         return defaultBluetoothAdapter;
     }
 
+    public static String stringToAddress(String address) {
+        return address.substring(0, 2) + ":" + address.substring(2, 4) + ":" + address.substring(4, 6) + ":" + address.substring(6, 8) + ":" + address.substring(8, 10) + ":" + address.substring(10, 12);
+    }
+
     public static String getBluetoothState(boolean isConnected) {
         return isConnected ? "Connected" : "Disconnected";
     }
