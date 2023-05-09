@@ -20,7 +20,7 @@ public class MainViewModel extends AndroidViewModel {
     private byte[] model;
     public byte[] outgoingModel;
 
-    private int delay = 1000;
+    private int delay = 500;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -41,13 +41,14 @@ public class MainViewModel extends AndroidViewModel {
                 }
             }
         });
-//        main.start();
+        main.start();
     }
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
-        model = BluetoothDataUtils.parseIncomingBluetoothData(incomingData);
+        model = incomingData;
+        //model = BluetoothDataUtils.parseIncomingBluetoothData(incomingData);
         outgoingModel = LedMapping.mapLEDs(model);
-        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+//        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
     }
 
     public void rotate(int angle) {

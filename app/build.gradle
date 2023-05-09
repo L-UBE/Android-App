@@ -25,7 +25,7 @@ android {
             pip {
                 install "scipy"
             }
-            buildPython "C:/Users/Sachen Sampath/AppData/Local/Programs/Python/Python38/python.exe"
+            buildPython "/usr/bin/python3"
         }
 
         sourceSets {
