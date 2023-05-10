@@ -5,7 +5,18 @@ public class LedColor {
 
     public static byte[] random(byte[] uncoloredLEDs) {
         byte[] coloredLEDs = new byte[res*res*res];
+        for (int i = 0; i < uncoloredLEDs.length; i++) {
+            byte color = (byte) (Math.random() * (15-1+1) + 1);
+            coloredLEDs[i] = (byte) (uncoloredLEDs[i] * color);
+        }
+        return coloredLEDs;
+    }
 
+    public static byte[] setColor(byte[] uncoloredLEDs, byte color) {
+        byte[] coloredLEDs = new byte[res*res*res];
+        for (int i = 0; i < uncoloredLEDs.length; i++) {
+            coloredLEDs[i] = (byte) (uncoloredLEDs[i] * color);
+        }
         return coloredLEDs;
     }
 
