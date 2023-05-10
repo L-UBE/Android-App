@@ -50,22 +50,9 @@ public class UploadFragment extends Fragment {
 
         ImageButton preset2 = binding.preset2;
         preset2.setOnClickListener(v -> {
-            Thread main = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for(int i = 0; i < 5; i++){
-                        byte[] testData = new byte[2048];
-                        java.util.Arrays.fill(testData, 0, 2048, (byte) 0xFF);
-                        mainViewModel.handleIncomingBluetoothData(testData);
-                        try {
-                            Thread.sleep(10);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-            main.start();
+            byte[] testData = new byte[4096];
+            java.util.Arrays.fill(testData, 0, 4096, (byte) 0x01);
+            mainViewModel.handleIncomingBluetoothData(testData);
         });
 
         ImageButton preset3 = binding.preset3;

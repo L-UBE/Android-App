@@ -790,6 +790,8 @@ public class LedMapping {
 	};
 
 	public static byte[] mapLEDs(byte[] unmappedLEDs) {
+		unmappedLEDs = LedColor.gradient_z(unmappedLEDs);
+
 		byte[] mappedLEDs = new byte[resolution*resolution*resolution];
 
 		for (int i = 0; i < unmappedLEDs.length; i++) {
@@ -820,5 +822,4 @@ public class LedMapping {
 
 		return compressed;
 	}
-
 }
