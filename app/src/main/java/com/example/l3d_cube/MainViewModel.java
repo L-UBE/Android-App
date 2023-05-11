@@ -45,7 +45,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
-        if(incomingData[0] == 0x08 && incomingData.length == 2) {
+        if(incomingData[0] == 0x08) {
             int angle = incomingData[1];
             this.angle = angle*10;
             outgoingModel = LedMapping.mapLEDs(transformation.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));

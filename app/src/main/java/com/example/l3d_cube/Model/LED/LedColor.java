@@ -100,7 +100,7 @@ public class LedColor {
         return coloredLEDs;
     }
 
-    public static byte[] gradient_Z(byte[] uncoloredLEDs) {
+    public static byte[] gradient_z(byte[] uncoloredLEDs) {
         byte[] coloredLEDs = new byte[res*res*res];
         for (int i = 0; i < res*res*res; i++) {
             if (i % res == 0) {
