@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.l3d_cube.Utility.ArrayUtils;
+import com.example.l3d_cube.Utility.MathUtils;
 import com.example.l3d_cube.Utility.SystemUtils;
 import com.example.l3d_cube.databinding.FragmentMathBinding;
 
@@ -33,11 +34,8 @@ public class MathFragment extends Fragment {
     private EditText resolution;
     private EditText xoffset;
     private EditText yoffset;
+    private EditText zoffset;
     private Button sendButton;
-
-    private ProgressBar progressBar;
-
-    FragmentDataTransfer fragmentDataTransfer;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,17 +45,17 @@ public class MathFragment extends Fragment {
 
         context = getContext();
 
-        progressBar = binding.progressBar;
-
         mathEquation = binding.mathEquation;
         resolution = binding.resolution;
         xoffset = binding.xoffset;
         yoffset = binding.yoffset;
+        zoffset = binding.zoffset;
         sendButton = binding.button;
 
         sendButton.setOnClickListener(view -> {
             computeMathEquation();
         });
+
         return root;
     }
 
@@ -66,11 +64,10 @@ public class MathFragment extends Fragment {
             @Override public void run() {
                 long startTimeMills = System.currentTimeMillis();
 
-                progressBar.setProgress(0);
                 String exp = mathEquation.getText().toString();
-                int res = parseEditText(resolution);
-                int xoff = parseEditText(xoffset);
-                int yoff = parseEditText(yoffset);
+                int res = MathUtils.parseEditText(resolution);
+                int xoff = MathUtils.parseEditText(xoffset);
+                int yoff = MathUtils.parseEditText(yoffset);
 
 
                 if (res > RESOLUTION_LIMIT) {
@@ -82,11 +79,13 @@ public class MathFragment extends Fragment {
                     return;
                 }
 
-                Argument varX = new Argument("x");
-                Argument varY = new Argument("y");
-                Expression e = new Expression(exp, varX ,varY);
 
-                boolean validExpression = e.checkSyntax();
+                Argument varx = new Argument("x");
+                Argument vary = new Argument("y");
+                Expression bot = new Expression("solve( z^2-x, z, -7.5, 0 )", varx, vary);
+                Expression top = new Expression("solve( z^2-x, z, 0, 7.5 )", varx, vary);
+                boolean validExpression = bot.checkSyntax();
+
                 if(!validExpression){
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -96,20 +95,40 @@ public class MathFragment extends Fragment {
                     return;
                 }
 
-                int[][] z = new int[res][res];
-                for (int x = 0; x < res; x++) {
-                    for(int y = 0; y < res; y++) {
-                        varX.setArgumentValue(x);
-                        varY.setArgumentValue(y);
-                        z[x][y] = (int) e.calculate();
+                byte[] testData = new byte[4096];
+                for (int x = 0; x < 16; x++) {
+                    for(int y = 0; y < 16; y++) {
+                        double scaledx = 1*x - 1*7.5;
+                        double scaledy = 1*y - 1*7.5;
+                        varx.setArgumentValue(scaledx);
+                        vary.setArgumentValue(scaledy);
+                        double test1 = top.calculate();
+                        double test2 = bot.calculate();
+
+
                     }
                 }
 
-                int[] flatArray = ArrayUtils.flatten(z);
+//                class HelloWorld {
+//                    public static void main(String[] args) {
+//
+//                        double value = 0;
+//
+//                        for(int i = 0; i < 16; i++) {
+//                            double temp = Math.abs((1*i - 1*7.5) - value);
+//                            if(temp <= .5){
+//                                System.out.println(temp);
+//                                System.out.println(1*i - 1*7.5);
+//                                return;
+//                            }
+//                        }
+//
+//                    }
+//                }
 
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        sendToBluetooth(ArrayUtils.intArrayToByteArray(flatArray));
+
                     }
                 });
 
@@ -132,22 +151,5 @@ public class MathFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        fragmentDataTransfer = (FragmentDataTransfer) context;
-    }
-
-    private int parseEditText(EditText editText) {
-        String text = editText.getText().toString();
-        if(!text.isEmpty()) {
-            return Integer.parseInt(text);
-        }
-        return 0;
-    }
-
-    public void sendToBluetooth(byte[] data) {
-        fragmentDataTransfer.fragmentToBluetooth(data);
-    }
-
-    public void sendToBluetooth(String data) {
-        fragmentDataTransfer.fragmentToBluetooth(data);
     }
 }

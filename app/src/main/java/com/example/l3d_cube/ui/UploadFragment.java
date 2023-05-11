@@ -45,14 +45,14 @@ public class UploadFragment extends Fragment {
         preset1.setOnClickListener(v -> {
             byte[] testData = new byte[4096];
             java.util.Arrays.fill(testData, 0, 4096, (byte) 0x00);
-            mainViewModel.handleIncomingBluetoothData(testData);
+            mainViewModel.setModel(testData);
         });
 
         ImageButton preset2 = binding.preset2;
         preset2.setOnClickListener(v -> {
             byte[] testData = new byte[4096];
-            java.util.Arrays.fill(testData, 0, 24, (byte) 0x01);
-            mainViewModel.handleIncomingBluetoothData(testData);
+            java.util.Arrays.fill(testData, 0, 4096, (byte) 0x01);
+            mainViewModel.setModel(testData);
         });
 
         ImageButton preset3 = binding.preset3;
@@ -67,22 +67,22 @@ public class UploadFragment extends Fragment {
 
         ImageButton preset5 = binding.preset5;
         preset5.setOnClickListener(v -> {
-            mainViewModel.handleIncomingBluetoothData(cube);
+            mainViewModel.setModel(cube);
         });
 
         ImageButton preset6 = binding.preset6;
         preset6.setOnClickListener(v -> {
-            mainViewModel.handleIncomingBluetoothData(sphere);
+            mainViewModel.setModel(sphere);
         });
 
         ImageButton preset7 = binding.preset7;
         preset7.setOnClickListener(v -> {
-            mainViewModel. handleIncomingBluetoothData(cylinder);
+            mainViewModel. setModel(cylinder);
         });
 
         ImageButton preset8 = binding.preset8;
         preset8.setOnClickListener(v -> {
-            mainViewModel.handleIncomingBluetoothData(rhomboid);
+            mainViewModel.setModel(rhomboid);
         });
     }
 

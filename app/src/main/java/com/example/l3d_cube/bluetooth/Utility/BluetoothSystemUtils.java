@@ -161,7 +161,11 @@ public class BluetoothSystemUtils {
     }
 
     public static String stringToAddress(String address) {
-        return address.substring(0, 2) + ":" + address.substring(2, 4) + ":" + address.substring(4, 6) + ":" + address.substring(6, 8) + ":" + address.substring(8, 10) + ":" + address.substring(10, 12);
+        if(address.length() == 12) {
+            return address.substring(0, 2) + ":" + address.substring(2, 4) + ":" + address.substring(4, 6) + ":" + address.substring(6, 8) + ":" + address.substring(8, 10) + ":" + address.substring(10, 12);
+
+        }
+        return "";
     }
 
     public static String getBluetoothState(boolean isConnected) {
