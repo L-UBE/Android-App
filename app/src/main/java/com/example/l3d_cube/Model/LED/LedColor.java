@@ -20,7 +20,7 @@ public class LedColor {
         return coloredLEDs;
     }
 
-    public static byte[] gradient_z(byte[] uncoloredLEDs) {
+    public static byte[] gradient_x(byte[] uncoloredLEDs) {
         byte[] coloredLEDs = new byte[res*res*res];
         for (int i = 0; i < res*res*res; i++) {
             if (i < res*res) {
@@ -40,21 +40,21 @@ public class LedColor {
             } else if (i < 8*res*res) {
                 coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x08);
             } else if (i < 9*res*res) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x08);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x09);
             } else if (i < 10*res*res) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x07);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0A);
             } else if (i < 11*res*res) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x06);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0B);
             } else if (i < 12*res*res) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x05);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0C);
             } else if (i < 13*res*res) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x04);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0D);
             } else if (i < 14*res*res) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x03);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0E);
             } else if (i < 15*res*res) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x02);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0F);
             } else {
-                coloredLEDs[i] = uncoloredLEDs[i];
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0F);
             }
         }
         return coloredLEDs;
@@ -80,27 +80,27 @@ public class LedColor {
             } else if (i % (res * res) < res * 8) {
                 coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x08);
             } else if (i % (res * res) < res * 9) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x08);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x09);
             } else if (i % (res * res) < res * 10) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x07);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0A);
             } else if (i % (res * res) < res * 11) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x06);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0B);
             } else if (i % (res * res) < res * 12) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x05);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0C);
             } else if (i % (res * res) < res * 13) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x04);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0D);
             } else if (i % (res * res) < res * 14) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x03);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0E);
             } else if (i % (res * res) < res * 15) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x02);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0F);
             } else {
-                coloredLEDs[i] = uncoloredLEDs[i];
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0F);
             }
         }
         return coloredLEDs;
     }
 
-    public static byte[] gradient_x(byte[] uncoloredLEDs) {
+    public static byte[] gradient_Z(byte[] uncoloredLEDs) {
         byte[] coloredLEDs = new byte[res*res*res];
         for (int i = 0; i < res*res*res; i++) {
             if (i % res == 0) {
@@ -120,21 +120,21 @@ public class LedColor {
             } else if (i % res == 7) {
                 coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x08);
             } else if (i % res == 8) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x08);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x09);
             } else if (i % res == 9) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x07);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0A);
             } else if (i % res == 10) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x06);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0B);
             } else if (i % res == 11) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x05);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0C);
             } else if (i % res == 12) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x04);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0D);
             } else if (i % res == 13) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x03);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0E);
             } else if (i % res == 14) {
-                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x02);
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0F);
             } else {
-                coloredLEDs[i] = uncoloredLEDs[i];
+                coloredLEDs[i] = (byte) (uncoloredLEDs[i] * 0x0F);
             }
         }
         return coloredLEDs;

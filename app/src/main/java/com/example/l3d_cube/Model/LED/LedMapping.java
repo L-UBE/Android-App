@@ -790,7 +790,7 @@ public class LedMapping {
 	};
 
 	public static byte[] mapLEDs(byte[] unmappedLEDs) {
-		byte[] coloredLEDs = LedColor.gradient_z(unmappedLEDs);
+		byte[] coloredLEDs = LedColor.gradient_x(unmappedLEDs);
 
 		byte[] mappedLEDs = new byte[resolution*resolution*resolution];
 

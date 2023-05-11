@@ -51,7 +51,7 @@ public class UploadFragment extends Fragment {
         ImageButton preset2 = binding.preset2;
         preset2.setOnClickListener(v -> {
             byte[] testData = new byte[4096];
-            java.util.Arrays.fill(testData, 0, 4096, (byte) 0x01);
+            java.util.Arrays.fill(testData, 0, 24, (byte) 0x01);
             mainViewModel.handleIncomingBluetoothData(testData);
         });
 
