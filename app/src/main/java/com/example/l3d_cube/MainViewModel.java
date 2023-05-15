@@ -9,12 +9,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.example.l3d_cube.Model.LED.LedMapping;
-import com.example.l3d_cube.bluetooth.Utility.BluetoothDataUtils;
 
 public class MainViewModel extends AndroidViewModel {
     private Python py;
-    private PyObject transformation;
+    private PyObject rotation_py;
     private int angle = 0;
+
+    private PyObject equation_py;
+    private boolean fill_in = true;
 
     public final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private byte[] model;
@@ -26,7 +28,8 @@ public class MainViewModel extends AndroidViewModel {
         super(application);
 
         py = Python.getInstance();
-        transformation = py.getModule("rotation");
+        rotation_py = py.getModule("rotation");
+        equation_py = py.getModule("equation");
 
         Thread main = new Thread(new Runnable() {
             @Override
@@ -47,19 +50,31 @@ public class MainViewModel extends AndroidViewModel {
     public void handleIncomingBluetoothData(byte[] incomingData) {
         if(incomingData[0] == 0x08) {
             int angle = incomingData[1];
-            this.angle = angle*10;
-            outgoingModel = LedMapping.mapLEDs(transformation.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+            new Thread(() -> {
+                this.angle = angle*10;
+                outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+            }).start();
         }
     }
 
     public void setModel(byte[] model) {
-        this.model = model;
-        outgoingModel = LedMapping.mapLEDs(model);
+        new Thread(() -> {
+            this.model = model;
+            outgoingModel = LedMapping.mapLEDs(model);
+        }).start();
+    }
+
+    public void computeMathEquation(String equation) {
+        new Thread(() -> {
+            outgoingModel = LedMapping.mapLEDs(equation_py.callAttr("compute", equation, 1, fill_in).toJava(byte[].class));
+        }).start();
     }
 
     public void rotate(int angle) {
-        this.angle += angle;
-        outgoingModel = LedMapping.mapLEDs(transformation.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+        new Thread(() -> {
+            this.angle += angle;
+            outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+        }).start();
     }
 
     private void setDelay(int delay) {

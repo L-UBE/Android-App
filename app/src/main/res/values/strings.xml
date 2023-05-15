@@ -3,7 +3,8 @@
     <string name="title_math">Math</string>
     <string name="title_gesture">Gesture</string>
     <string name="title_upload">Upload</string>
-    <string name="title_settings">Settings</string>
+    <string name="title_display_settings">Display Settings</string>
+    <string name="title_app_settings">App Settings</string>
 
     <string name="MCU">MCU</string>
     <string name="bluetooth_connection">Disconnected</string>

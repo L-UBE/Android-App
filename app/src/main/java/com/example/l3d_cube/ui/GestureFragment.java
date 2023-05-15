@@ -26,8 +26,6 @@ public class GestureFragment extends Fragment{
     private FragmentGestureBinding binding;
     private Context context;
 
-    FragmentDataTransfer fragmentDataTransfer;
-
     private GestureDetectorCompat motionDetector;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -54,7 +52,7 @@ public class GestureFragment extends Fragment{
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             if(GestureUtils.isAboveVThreshold(velocityX, velocityY)) {
-                sendToBluetooth(GestureUtils.handleFling(context, velocityX, velocityY));
+                //send
             }
             return super.onFling(event1, event2, velocityX, velocityY);
         }
@@ -63,19 +61,19 @@ public class GestureFragment extends Fragment{
         public boolean onScroll(MotionEvent event1, MotionEvent event2,
                                 float distanceX, float distanceY) {
             if(GestureUtils.shouldSendScroll()){
-                sendToBluetooth(GestureUtils.handleScroll(context, event1, distanceX, distanceY));
+                //send
             }
             return super.onScroll(event1, event2, distanceX, distanceY);
         }
 
         @Override
         public void onLongPress(MotionEvent event){
-            sendToBluetooth(GestureUtils.handleLongPress(context));
+            //send
         }
 
         @Override
         public boolean onDoubleTap(MotionEvent event) {
-            sendToBluetooth(GestureUtils.handleDoubleTap(context));
+            //send
             return super.onDoubleTap(event);
         }
     }
@@ -89,10 +87,5 @@ public class GestureFragment extends Fragment{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        fragmentDataTransfer = (FragmentDataTransfer) context;
-    }
-
-    public void sendToBluetooth(byte[] data) {
-        fragmentDataTransfer.fragmentToBluetooth(data);
     }
 }

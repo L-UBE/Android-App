@@ -19,10 +19,10 @@ import com.example.l3d_cube.bluetooth.Utility.BluetoothSystemUtils;
 import java.util.List;
 
 @SuppressLint("MissingPermission")
-public class SettingsFragment extends PreferenceFragmentCompat {
+public class AppSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.fragment_settings, rootKey);
+        setPreferencesFromResource(R.xml.fragment_app_settings, rootKey);
 
         Context context = getContext();
         SharedPreferences sharedPreferences =

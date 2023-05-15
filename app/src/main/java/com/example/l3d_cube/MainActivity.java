@@ -1,6 +1,5 @@
 package com.example.l3d_cube;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,13 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
 import com.example.l3d_cube.bluetooth.SMG.BluetoothSMGViewModel;
 import com.example.l3d_cube.bluetooth.Utility.BluetoothConnectionUtils;
 import com.example.l3d_cube.bluetooth.Utility.BluetoothSystemUtils;
 import com.example.l3d_cube.bluetooth.MCU.BluetoothMCUViewModel;
-import com.example.l3d_cube.ui.FragmentDataTransfer;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -32,7 +28,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.l3d_cube.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements FragmentDataTransfer {
+public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private MainViewModel mainViewModel;
@@ -68,13 +64,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
         appBarLayout = binding.appbarLayout;
         setSupportActionBar(binding.toolbar);
 
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
-
         BottomNavigationView navView = binding.bottomNavMenu;
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_math, R.id.navigation_gesture, R.id.navigation_upload, R.id.navigation_settings)
+                R.id.navigation_math, R.id.navigation_gesture, R.id.navigation_upload, R.id.navigation_display_settings,R.id.navigation_app_settings)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -188,24 +180,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDataTrans
                 }
             }
             BluetoothSystemUtils.autoConnectFailedToast(this);
-        }
-    }
-
-    @Override
-    public void fragmentToBluetooth(String data) {
-        if(bluetoothMCUViewModel.isConnected()){
-            bluetoothMCUViewModel.write(data.getBytes());
-        } else {
-            BluetoothSystemUtils.noBluetoothDeviceConnectedToast(this);
-        }
-    }
-
-    @Override
-    public void fragmentToBluetooth(byte[] data) {
-        if(bluetoothMCUViewModel.isConnected()){
-            bluetoothMCUViewModel.write(data);
-        } else {
-            BluetoothSystemUtils.noBluetoothDeviceConnectedToast(this);
         }
     }
 }
