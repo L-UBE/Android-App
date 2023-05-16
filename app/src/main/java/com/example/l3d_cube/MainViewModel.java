@@ -44,7 +44,7 @@ public class MainViewModel extends AndroidViewModel {
                 }
             }
         });
-        main.start();
+//        main.start();
     }
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
@@ -61,12 +61,15 @@ public class MainViewModel extends AndroidViewModel {
         new Thread(() -> {
             this.model = model;
             outgoingModel = LedMapping.mapLEDs(model);
+            refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
         }).start();
     }
 
     public void computeMathEquation(String equation) {
         new Thread(() -> {
-            outgoingModel = LedMapping.mapLEDs(equation_py.callAttr("compute", equation, 1, fill_in).toJava(byte[].class));
+            model = equation_py.callAttr("compute", equation, 1, fill_in).toJava(byte[].class);
+            outgoingModel = LedMapping.mapLEDs(model);
+            refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
         }).start();
     }
 
@@ -74,6 +77,7 @@ public class MainViewModel extends AndroidViewModel {
         new Thread(() -> {
             this.angle += angle;
             outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+            refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
         }).start();
     }
 

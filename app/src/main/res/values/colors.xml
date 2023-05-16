@@ -8,6 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="gray1">#F1F6F9</color>
+    <color name="gray2">#394867</color>
+    <color name="gray3">#212A3E</color>
+    <color name="gray4">#9BA4B5</color>
+    <color name="gray5">#146C94</color>
+
     <color name="red">#ff0000</color>
     <color name="red_orange">#ff5700</color>
     <color name="orange">#FF7F00</color>
