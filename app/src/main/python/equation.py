@@ -39,16 +39,17 @@ def fill_in(nonfilled_points):
                     end = None
     return filled_points
 
-def compute(equation, scale, shouldFillIn):
+def compute(equation, scale, xoff, yoff, zoff, shouldFillIn):
     computed_points = np.array(bytearray(4096))
     x_var, y_var, z_var = symbols('x y z')
     scaled_points = [*np.arange(-scale*7.5, scale*7.5 + scale, scale)]
     equation = parse_expr(equation, transformations=transformations, evaluate=False)
     for x, x_scaled in enumerate(scaled_points):
         for y, y_scaled in enumerate(scaled_points):
-            z = solveset(equation.subs({x_var: x_scaled, y_var: y_scaled}), z_var, domain=S.Reals).args
+            z = solveset(equation.subs(
+                {x_var: x_scaled + xoff*scale, y_var: y_scaled + yoff*scale}), z_var, domain=S.Reals).args
             for root in z:
-                index = round(root, scale, scaled_points)
+                index = round(root + zoff*scale, scale, scaled_points)
                 if(index):
                     if (isinstance(index, int)):
                         computed_points[256*x + 16*y + index] = 0x01
