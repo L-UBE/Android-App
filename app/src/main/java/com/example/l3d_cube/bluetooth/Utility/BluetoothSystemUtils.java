@@ -197,7 +197,7 @@ public class BluetoothSystemUtils {
         bluetoothErrorToast(context, failMsg);
     }
 
-    private static void bluetoothInfoToast(Context context, String message) {
+    public static void bluetoothInfoToast(Context context, String message) {
         Toasty.custom(context,
                         message,
                         R.drawable.bluetooth_settings,

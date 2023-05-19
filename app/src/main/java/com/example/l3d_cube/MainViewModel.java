@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.example.l3d_cube.Model.LED.LedMapping;
+import com.example.l3d_cube.bluetooth.Utility.BluetoothConnectionUtils;
+import com.example.l3d_cube.bluetooth.Utility.BluetoothSystemUtils;
 
 public class MainViewModel extends AndroidViewModel {
     private Python py;
@@ -55,82 +57,28 @@ public class MainViewModel extends AndroidViewModel {
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
         if(incomingData[0] == 0x00) {
-            int offset = incomingData[1];
-            this.xoff -= offset;
-            new Thread(() -> {
-                model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
-                if(angle != 0){
-                    outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
-                } else {
-                    outgoingModel = LedMapping.mapLEDs(model);
-                }
-                refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-            }).start();
+            this.xoff -= incomingData[1];
+            new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x01) {
-            int offset = incomingData[1];
-            this.xoff += offset;
-            new Thread(() -> {
-                model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
-                if(angle != 0){
-                    outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
-                } else {
-                    outgoingModel = LedMapping.mapLEDs(model);
-                }
-                refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-            }).start();
+            this.xoff -= incomingData[1];
+            new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x02) {
-            int offset = incomingData[1];
-            this.zoff += offset;
-            new Thread(() -> {
-                model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
-                if(angle != 0){
-                    outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
-                } else {
-                    outgoingModel = LedMapping.mapLEDs(model);
-                }
-                refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-            }).start();
+            this.xoff -= incomingData[1];
+            new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x03) {
-            int offset = incomingData[1];
-            this.zoff -= offset;
-            new Thread(() -> {
-                model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
-                if(angle != 0){
-                    outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
-                } else {
-                    outgoingModel = LedMapping.mapLEDs(model);
-                }
-                refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-            }).start();
+            this.xoff -= incomingData[1];
+            new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x04) {
-            int offset = incomingData[1];
-            this.yoff += offset;
-            new Thread(() -> {
-                model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
-                if(angle != 0){
-                    outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
-                } else {
-                    outgoingModel = LedMapping.mapLEDs(model);
-                }
-                refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-            }).start();
+            this.xoff -= incomingData[1];
+            new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x05) {
-            int offset = incomingData[1];
-            this.yoff -= offset;
-            new Thread(() -> {
-                model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
-                if(angle != 0){
-                    outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
-                } else {
-                    outgoingModel = LedMapping.mapLEDs(model);
-                }
-                refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-            }).start();
+            this.xoff -= incomingData[1];
+            new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x06) {
             return;
@@ -146,33 +94,8 @@ public class MainViewModel extends AndroidViewModel {
             }).start();
         }
         else if(incomingData[0] == 0x09) {
-            int zoom = incomingData[1];
-
-            if(zoom == 2) {
-                this.scale = .5;
-            }
-            else if(zoom == 3) {
-                this.scale = .25;
-            }
-            else if(zoom == 5) {
-                this.scale = 2;
-            }
-            else if(zoom == 6) {
-                this.scale = 4;
-            }
-            else {
-                this.scale = 1;
-            }
-
-            new Thread(() -> {
-                model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
-                if(angle != 0){
-                    outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
-                } else {
-                    outgoingModel = LedMapping.mapLEDs(model);
-                }
-                refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-            }).start();
+            scale = getScale(incomingData[1]);
+            new Thread(this::transformation).start();
         }
     }
 
@@ -199,6 +122,34 @@ public class MainViewModel extends AndroidViewModel {
             outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
             refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
         }).start();
+    }
+
+    private void transformation() {
+        model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
+        if(angle != 0){
+            outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+        } else {
+            outgoingModel = LedMapping.mapLEDs(model);
+        }
+        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+    }
+
+    private double getScale(int zoom){
+        if(zoom == 2) {
+            return .5;
+        }
+        else if(zoom == 3) {
+            return .25;
+        }
+        else if(zoom == 5) {
+            return 2;
+        }
+        else if(zoom == 6) {
+            return 4;
+        }
+        else {
+            return 1;
+        }
     }
 
     public void reset() {

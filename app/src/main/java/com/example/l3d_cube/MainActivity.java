@@ -28,6 +28,8 @@ import androidx.preference.PreferenceManager;
 
 import com.example.l3d_cube.databinding.ActivityMainBinding;
 
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -86,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothSMGViewModel = new ViewModelProvider(this).get(BluetoothSMGViewModel.class);
         bluetoothSMGViewModel.incomingData().observe(this, incomingData -> {
-            mainViewModel.handleIncomingBluetoothData(incomingData);
+
+            BluetoothSystemUtils.bluetoothInfoToast(this, "Message Received" + Arrays.toString(incomingData));
+//            mainViewModel.handleIncomingBluetoothData(incomingData);
         });
         bluetoothSMGViewModel.connectionStatus().observe(this, connectionStatus -> {
             String SMGBluetoothState = BluetoothSystemUtils.getBluetoothState(connectionStatus);
