@@ -25,8 +25,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="9"
-            android:max="20"
-            android:progress="15"
+            android:max="9"
+            android:progress="5"
             android:progressDrawable="@drawable/brightness"
             android:thumb="@drawable/thumb"/>
 

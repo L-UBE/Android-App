@@ -80,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         bluetoothMCUViewModel = new ViewModelProvider(this).get(BluetoothMCUViewModel.class);
+        bluetoothMCUViewModel.incomingData().observe(this, incomingData -> {
+            BluetoothSystemUtils.bluetoothInfoToast(this, "Message Received " + Arrays.toString(incomingData));
+            if(incomingData[0] == -36 && incomingData[1] == -70){
+                byte[] handshake = {(byte) 0xAB, (byte) 0xCD};
+                bluetoothMCUViewModel.write(handshake);
+            }
+        });
         bluetoothMCUViewModel.connectionStatus().observe(this, connectionStatus -> {
             String MCUBluetoothState = BluetoothSystemUtils.getBluetoothState(connectionStatus);
             BluetoothSystemUtils.bluetoothConnectToast(this, connectionStatus);
@@ -88,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         bluetoothSMGViewModel = new ViewModelProvider(this).get(BluetoothSMGViewModel.class);
         bluetoothSMGViewModel.incomingData().observe(this, incomingData -> {
-
-            BluetoothSystemUtils.bluetoothInfoToast(this, "Message Received" + Arrays.toString(incomingData));
+            BluetoothSystemUtils.bluetoothInfoToast(this, "Message Received " + Arrays.toString(incomingData));
 //            mainViewModel.handleIncomingBluetoothData(incomingData);
         });
         bluetoothSMGViewModel.connectionStatus().observe(this, connectionStatus -> {

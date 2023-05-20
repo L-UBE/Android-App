@@ -32,6 +32,8 @@ public class MainViewModel extends AndroidViewModel {
 
     private int delay = 300;
 
+    private byte brightness = 0x04;
+
     public MainViewModel(@NonNull Application application) {
         super(application);
 
@@ -90,7 +92,7 @@ public class MainViewModel extends AndroidViewModel {
             int angle = incomingData[1];
             this.angle = angle*10;
             new Thread(() -> {
-                outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+                outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class), brightness);
             }).start();
         }
         else if(incomingData[0] == 0x09) {
@@ -102,7 +104,7 @@ public class MainViewModel extends AndroidViewModel {
     public void setModel(byte[] model) {
         new Thread(() -> {
             this.model = model;
-            outgoingModel = LedMapping.mapLEDs(model);
+            outgoingModel = LedMapping.mapLEDs(model, brightness);
             refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
         }).start();
     }
@@ -111,7 +113,7 @@ public class MainViewModel extends AndroidViewModel {
         this.equation = equation;
         new Thread(() -> {
             model = equation_py.callAttr("compute", equation, 1, 0, 0, 0, fill_in).toJava(byte[].class);
-            outgoingModel = LedMapping.mapLEDs(model);
+            outgoingModel = LedMapping.mapLEDs(model, brightness);
             refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
         }).start();
     }
@@ -119,7 +121,7 @@ public class MainViewModel extends AndroidViewModel {
     public void rotate(int angle) {
         new Thread(() -> {
             this.angle += angle;
-            outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+            outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class), brightness);
             refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
         }).start();
     }
@@ -127,9 +129,9 @@ public class MainViewModel extends AndroidViewModel {
     private void transformation() {
         model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
         if(angle != 0){
-            outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+            outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class), brightness);
         } else {
-            outgoingModel = LedMapping.mapLEDs(model);
+            outgoingModel = LedMapping.mapLEDs(model, brightness);
         }
         refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
     }
@@ -158,6 +160,12 @@ public class MainViewModel extends AndroidViewModel {
         yoff = 0;
         zoff = 0;
         scale = 1;
+    }
+
+    public void setBrightness(int value) {
+        brightness = (byte) value;
+        outgoingModel = LedMapping.mapLEDs(model, brightness);
+        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
     }
 
 

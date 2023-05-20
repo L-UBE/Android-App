@@ -20,10 +20,6 @@ public class BluetoothSMGManager extends BluetoothManager {
 
     private final ProfileDataCallback incomingBluetoothData = (device, data) -> this.incomingData.setValue(data.getValue());
 
-    public void setIsDeviceConnected(boolean isDeviceConnected) {
-        this.isDeviceConnected.setValue(isDeviceConnected);
-    }
-
     public BluetoothSMGManager(@NonNull final Context context) { super(context); }
 
     @Override
