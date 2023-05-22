@@ -15,19 +15,24 @@
     <color name="gray5">#146C94</color>
 
     <color name="red">#ff0000</color>
-    <color name="red_orange">#ff5700</color>
-    <color name="orange">#FF7F00</color>
-    <color name="orange_yellow">#ffbf00</color>
-    <color name="yellow">#FFFF00</color>
-    <color name="yellow_green">#b1ff00</color>
     <color name="green">#00ff00</color>
-    <color name="green_cyan">#00ff80</color>
-    <color name="cyan">#00ffff</color>
-    <color name="cyan_blue">#00acff</color>
-    <color name="blue">#0000FF</color>
-    <color name="violet">#7F00FF</color>
-    <color name="pink">#FF00FF</color>
-    <color name="dark_pink">#FF007F</color>
+
+
+    <color name="rgb_1">#ff0000</color>
+    <color name="rgb_2">#ff5700</color>
+    <color name="rgb_3">#ff7F00</color>
+    <color name="rgb_4">#ffbf00</color>
+    <color name="rgb_5">#ffff00</color>
+    <color name="rgb_6">#daff00</color>
+    <color name="rgb_7">#99ff00</color>
+    <color name="rgb_8">#00ff00</color>
+    <color name="rgb_9">#00ffff</color>
+    <color name="rgb_10">#00acff</color>
+    <color name="rgb_11">#0000ff</color>
+    <color name="rgb_12">#5a00ff</color>
+    <color name="rgb_13">#7f00ff</color>
+    <color name="rgb_14">#ff00ff</color>
+    <color name="rgb_15">#ff007f</color>
 
 
 </resources>

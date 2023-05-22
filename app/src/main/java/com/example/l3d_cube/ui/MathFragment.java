@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
@@ -37,12 +39,13 @@ public class MathFragment extends Fragment {
 
     private final int RESOLUTION_LIMIT = 1000;
 
-    private EditText equation;
+    private TextView equation;
     private String userInput = "";
-    private EditText resolution;
-    private EditText xoffset;
-    private EditText yoffset;
-    private EditText zoffset;
+    private int scale;
+    private int xoffset;
+    private int yoffset;
+    private int zoffset;
+    private ToggleButton fillin;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,10 +58,11 @@ public class MathFragment extends Fragment {
         context = getContext();
 
         equation = binding.mathEquation;
-//        resolution = binding.resolution;
-//        xoffset = binding.xoffset;
-//        yoffset = binding.yoffset;
-//        zoffset = binding.zoffset;
+        scale = MathUtils.parseEditText(binding.scale);
+        xoffset = MathUtils.parseEditText(binding.xoffset);
+        yoffset = MathUtils.parseEditText(binding.yoffset);
+        zoffset = MathUtils.parseEditText(binding.zoffset);
+        fillin = binding.fillInToggleButton;
 
         binding.enter.setOnClickListener(view -> {
             String eq = equation.getText().toString();
@@ -69,12 +73,16 @@ public class MathFragment extends Fragment {
             }
         });
 
-        setupCalc();
+        fillin.setOnClickListener(view -> {
+            mainViewModel.setFillIn(fillin.isChecked());
+        });
+
+        setupKeys();
 
         return root;
     }
 
-    private void setupCalc() {
+    private void setupKeys() {
         Map<View, String> buttonMap = new HashMap<>();
         buttonMap.put(binding.nine, "9");
         buttonMap.put(binding.eight, "8");

@@ -13,4 +13,7 @@
     <string name="SMG">SMG</string>
     <string name="SMGConnectionStatus">Disconnected</string>
     <string name="SMGConnect">SMGConnect</string>
+
+    <string name="fillInOn">Fill In On</string>
+    <string name="fillInOff">Fill In Off</string>
 </resources>

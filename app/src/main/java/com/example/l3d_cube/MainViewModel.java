@@ -9,12 +9,16 @@ import androidx.lifecycle.MutableLiveData;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.example.l3d_cube.Model.LED.LedMapping;
-import com.example.l3d_cube.bluetooth.Utility.BluetoothConnectionUtils;
-import com.example.l3d_cube.bluetooth.Utility.BluetoothSystemUtils;
+import com.example.l3d_cube.Model.PresetShapes.Cube;
 
 public class MainViewModel extends AndroidViewModel {
     private Python py;
     private PyObject rotation_py;
+    private PyObject equation_py;
+
+    private boolean handshake = false;
+
+    private boolean fillIn = true;
 
     private String equation = "";
     private int angle = 0;
@@ -23,15 +27,11 @@ public class MainViewModel extends AndroidViewModel {
     private int zoff = 0;
     private double scale = 1;
 
-    private PyObject equation_py;
-    private boolean fill_in = true;
-
-    public final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
-    private byte[] model;
+    private byte[] model = Cube.cube;
     public byte[] outgoingModel;
+    public final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
 
-    private int delay = 300;
-
+    private String color = "gl1";
     private byte brightness = 0x04;
 
     public MainViewModel(@NonNull Application application) {
@@ -40,21 +40,6 @@ public class MainViewModel extends AndroidViewModel {
         py = Python.getInstance();
         rotation_py = py.getModule("rotation");
         equation_py = py.getModule("equation");
-
-        Thread main = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-                    try {
-                        Thread.sleep(delay);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException("Refresh Thread Failed!");
-                    }
-                }
-            }
-        });
-//        main.start();
     }
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
@@ -63,23 +48,23 @@ public class MainViewModel extends AndroidViewModel {
             new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x01) {
-            this.xoff -= incomingData[1];
+            this.xoff += incomingData[1];
             new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x02) {
-            this.xoff -= incomingData[1];
+            this.zoff += incomingData[1];
             new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x03) {
-            this.xoff -= incomingData[1];
+            this.zoff -= incomingData[1];
             new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x04) {
-            this.xoff -= incomingData[1];
+            this.yoff += incomingData[1];
             new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x05) {
-            this.xoff -= incomingData[1];
+            this.yoff -= incomingData[1];
             new Thread(this::transformation).start();
         }
         else if(incomingData[0] == 0x06) {
@@ -89,8 +74,7 @@ public class MainViewModel extends AndroidViewModel {
             return;
         }
         else if(incomingData[0] == 0x08) {
-            int angle = incomingData[1];
-            this.angle = angle*10;
+            this.angle = incomingData[1]*10;
             new Thread(() -> {
                 outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class), brightness);
             }).start();
@@ -104,36 +88,32 @@ public class MainViewModel extends AndroidViewModel {
     public void setModel(byte[] model) {
         new Thread(() -> {
             this.model = model;
-            outgoingModel = LedMapping.mapLEDs(model, brightness);
-            refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+            refresh(this.model);
         }).start();
     }
 
     public void computeMathEquation(String equation) {
         this.equation = equation;
         new Thread(() -> {
-            model = equation_py.callAttr("compute", equation, 1, 0, 0, 0, fill_in).toJava(byte[].class);
-            outgoingModel = LedMapping.mapLEDs(model, brightness);
-            refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+            model = equation_py.callAttr("compute", equation, 1, 0, 0, 0, fillIn).toJava(byte[].class);
+            refresh(model);
         }).start();
     }
 
     public void rotate(int angle) {
         new Thread(() -> {
             this.angle += angle;
-            outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class), brightness);
-            refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+            refresh(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
         }).start();
     }
 
     private void transformation() {
-        model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fill_in).toJava(byte[].class);
+        model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fillIn).toJava(byte[].class);
         if(angle != 0){
-            outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class), brightness);
+            refresh(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
         } else {
-            outgoingModel = LedMapping.mapLEDs(model, brightness);
+            refresh(model);
         }
-        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
     }
 
     private double getScale(int zoom){
@@ -164,12 +144,32 @@ public class MainViewModel extends AndroidViewModel {
 
     public void setBrightness(int value) {
         brightness = (byte) value;
-        outgoingModel = LedMapping.mapLEDs(model, brightness);
-        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+        refresh(model);
     }
 
+    private void refresh(byte[] data) {
+        if(isHandshakeComplete()) {
+            outgoingModel = LedMapping.mapLEDs(data, brightness);
+            refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
+        }
+    }
 
-    private void setDelay(int delay) {
-        this.delay = delay;
+    public void completeHandshake() {
+        handshake = true;
+        refresh(model);
+    }
+
+    private boolean isHandshakeComplete() {
+        return handshake;
+    }
+
+    public void setFillIn(boolean fillIn) {
+        this.fillIn = fillIn;
+        new Thread(this::transformation).start();
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+        refresh(model);
     }
 }

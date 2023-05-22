@@ -37,117 +37,110 @@
         android:layout_height="0dp"
         android:orientation="horizontal"
         android:layout_weight="3"
-        android:weightSum="16"
+        android:weightSum="15"
         android:padding="8dp" >
 
         <Button
-            android:id="@+id/button1"
-            android:backgroundTint="@color/white"
+            android:id="@+id/static1"
+            android:backgroundTint="@color/rgb_1"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button2"
-            android:backgroundTint="@color/red"
+            android:id="@+id/static2"
+            android:backgroundTint="@color/rgb_2"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button3"
-            android:backgroundTint="@color/red_orange"
+            android:id="@+id/static3"
+            android:backgroundTint="@color/rgb_3"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button4"
-            android:backgroundTint="@color/orange"
+            android:id="@+id/static4"
+            android:backgroundTint="@color/rgb_4"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button5"
-            android:backgroundTint="@color/orange_yellow"
+            android:id="@+id/static5"
+            android:backgroundTint="@color/rgb_5"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button6"
-            android:backgroundTint="@color/yellow"
+            android:id="@+id/static6"
+            android:backgroundTint="@color/rgb_6"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button7"
-            android:backgroundTint="@color/yellow_green"
+            android:id="@+id/static7"
+            android:backgroundTint="@color/rgb_7"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button8"
-            android:backgroundTint="@color/green"
+            android:id="@+id/static8"
+            android:backgroundTint="@color/rgb_8"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button9"
-            android:backgroundTint="@color/cyan"
+            android:id="@+id/static9"
+            android:backgroundTint="@color/rgb_9"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button10"
-            android:backgroundTint="@color/cyan_blue"
+            android:id="@+id/static10"
+            android:backgroundTint="@color/rgb_10"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button11"
-            android:backgroundTint="@color/blue"
+            android:id="@+id/static11"
+            android:backgroundTint="@color/rgb_11"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button12"
-            android:backgroundTint="@color/purple_700"
+            android:id="@+id/static12"
+            android:backgroundTint="@color/rgb_12"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button13"
-            android:backgroundTint="@color/violet"
+            android:id="@+id/static13"
+            android:backgroundTint="@color/rgb_13"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button14"
-            android:backgroundTint="@color/pink"
+            android:id="@+id/static14"
+            android:backgroundTint="@color/rgb_14"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/button15"
-            android:backgroundTint="@color/dark_pink"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/button16"
-            android:backgroundTint="@color/black"
+            android:id="@+id/static15"
+            android:backgroundTint="@color/rgb_15"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"/>
@@ -159,7 +152,7 @@
         android:layout_height="0dp"
         android:orientation="horizontal"
         android:layout_weight="6"
-        android:weightSum="3"
+        android:weightSum="4"
         android:padding="8dp">
 
         <LinearLayout
@@ -167,8 +160,50 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
-            android:weightSum="3"
-            android:background="@color/purple_200">
+            android:weightSum="4"
+            android:background="@color/gray2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Gradient X"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:background="@color/gray3"/>
+
+            <Button
+                android:id="@+id/gradientX1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
+
+            <Button
+                android:id="@+id/gradientX2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_8"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
+
+            <Button
+                android:id="@+id/gradientX3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_11"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
 
         </LinearLayout>
 
@@ -177,8 +212,50 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
-            android:weightSum="3"
-            android:background="@color/purple_500">
+            android:weightSum="4"
+            android:background="@color/gray2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Gradient Y"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:background="@color/gray3"/>
+
+            <Button
+                android:id="@+id/gradientY1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
+
+            <Button
+                android:id="@+id/gradientY2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_8"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
+
+            <Button
+                android:id="@+id/gradientY3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_11"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
 
         </LinearLayout>
 
@@ -187,8 +264,91 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="1"
-            android:weightSum="3"
-            android:background="@color/purple_700">
+            android:weightSum="4"
+            android:background="@color/gray2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Gradient Z"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:background="@color/gray3"/>
+
+            <Button
+                android:id="@+id/gradientZ1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
+
+            <Button
+                android:id="@+id/gradientZ2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_8"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
+
+            <Button
+                android:id="@+id/gradientZ3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_11"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="25sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:weightSum="8"
+            android:background="@color/gray2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:text="Gradient Layered"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:background="@color/gray3"/>
+
+            <Button
+                android:id="@+id/gradientL1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:textSize="25sp"/>
+
+            <Button
+                android:id="@+id/gradientL2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/rgb_11"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:textSize="25sp"/>
 
         </LinearLayout>
 

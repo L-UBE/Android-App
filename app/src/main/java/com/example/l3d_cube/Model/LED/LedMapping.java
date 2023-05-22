@@ -801,7 +801,6 @@ public class LedMapping {
 		}
 
 		return compress(mappedLEDs, brightness);
-//		return unmappedLEDs;
 	}
 
 	private static int getMappedIndex(short hash) {
