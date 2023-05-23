@@ -58,16 +58,19 @@ public class MathFragment extends Fragment {
         context = getContext();
 
         equation = binding.mathEquation;
-        scale = MathUtils.parseEditText(binding.scale);
-        xoffset = MathUtils.parseEditText(binding.xoffset);
-        yoffset = MathUtils.parseEditText(binding.yoffset);
-        zoffset = MathUtils.parseEditText(binding.zoffset);
         fillin = binding.fillInToggleButton;
 
         binding.enter.setOnClickListener(view -> {
+            scale = MathUtils.parseEditText(binding.scale);
+            if(scale == 0) {
+                scale = 1;
+            }
+            xoffset = MathUtils.parseEditText(binding.xoffset);
+            yoffset = MathUtils.parseEditText(binding.yoffset);
+            zoffset = MathUtils.parseEditText(binding.zoffset);
             String eq = equation.getText().toString();
             if(MathUtils.validateEquation(eq)) {
-                mainViewModel.computeMathEquation(eq);
+                mainViewModel.computeMathEquation(eq, scale, xoffset, yoffset, zoffset);
             } else {
                 SystemUtils.systemErrorToast(context, "Invalid expression");
             }

@@ -789,9 +789,10 @@ public class LedMapping {
 			0x33ff, 0x33fe, 0x33fd, 0x33fc, 0x33fb, 0x33fa, 0x33f9, 0x33f8, 0x33f7, 0x33f6, 0x33f5, 0x33f4, 0x33f3, 0x33f2, 0x33f1, 0x33f0
 	};
 
-	public static byte[] mapLEDs(byte[] unmappedLEDs, byte brightness) {
-		byte[] coloredLEDs = LedColor.gradient_z(unmappedLEDs);
-
+	public static byte[] mapLEDs(byte[] unmappedLEDs, String color, byte brightness) {
+//		byte[] coloredLEDs = LedColor.color(unmappedLEDs, "s1");
+//		return coloredLEDs;
+		byte[] coloredLEDs = LedColor.color(unmappedLEDs, color);
 		byte[] mappedLEDs = new byte[resolution*resolution*resolution];
 
 		for (int i = 0; i < unmappedLEDs.length; i++) {

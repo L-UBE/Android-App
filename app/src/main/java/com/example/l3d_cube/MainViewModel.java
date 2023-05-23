@@ -9,7 +9,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.example.l3d_cube.Model.LED.LedMapping;
+import com.example.l3d_cube.Model.Models.Model;
+import com.example.l3d_cube.Model.Models.ModelGeneric;
+import com.example.l3d_cube.Model.Models.ModelMath;
+import com.example.l3d_cube.Model.Models.ModelShape;
 import com.example.l3d_cube.Model.PresetShapes.Cube;
+import com.example.l3d_cube.Utility.MathUtils;
 
 public class MainViewModel extends AndroidViewModel {
     private Python py;
@@ -18,21 +23,14 @@ public class MainViewModel extends AndroidViewModel {
 
     private boolean handshake = false;
 
-    private boolean fillIn = true;
-
-    private String equation = "";
-    private int angle = 0;
-    private int xoff = 0;
-    private int yoff = 0;
-    private int zoff = 0;
-    private double scale = 1;
-
-    private byte[] model = Cube.cube;
+    private Model model;
     public byte[] outgoingModel;
     public final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
 
+    private boolean power = true;
     private String color = "gl1";
     private byte brightness = 0x04;
+    private boolean fillIn = true;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -40,136 +38,220 @@ public class MainViewModel extends AndroidViewModel {
         py = Python.getInstance();
         rotation_py = py.getModule("rotation");
         equation_py = py.getModule("equation");
+
+        model = new ModelShape(rotation_py, Cube.cube);
     }
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
+        // LEFT
         if(incomingData[0] == 0x00) {
-            this.xoff -= incomingData[1];
-            new Thread(this::transformation).start();
+            translate_x(-1 * incomingData[1]);
         }
+
+        // RIGHT
         else if(incomingData[0] == 0x01) {
-            this.xoff += incomingData[1];
-            new Thread(this::transformation).start();
+            translate_x(incomingData[1]);
         }
+
+        // UP
         else if(incomingData[0] == 0x02) {
-            this.zoff += incomingData[1];
-            new Thread(this::transformation).start();
+            translate_z(incomingData[1]);
         }
+
+        // DOWN
         else if(incomingData[0] == 0x03) {
-            this.zoff -= incomingData[1];
-            new Thread(this::transformation).start();
+            translate_z(-1 * incomingData[1]);
         }
+
+        // FORWARD
         else if(incomingData[0] == 0x04) {
-            this.yoff += incomingData[1];
-            new Thread(this::transformation).start();
+            translate_y(incomingData[1]);
         }
+
+        // BACKWARD
         else if(incomingData[0] == 0x05) {
-            this.yoff -= incomingData[1];
-            new Thread(this::transformation).start();
+            translate_y(-1 * incomingData[1]);
         }
+
+        // ROTATE X
         else if(incomingData[0] == 0x06) {
             return;
         }
+
+        // ROTATE Y
         else if(incomingData[0] == 0x07) {
             return;
         }
+
+        // ROTATE Z
         else if(incomingData[0] == 0x08) {
-            this.angle = incomingData[1]*10;
             new Thread(() -> {
-                outgoingModel = LedMapping.mapLEDs(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class), brightness);
+                rotate(incomingData[1]*10);
             }).start();
         }
+
         else if(incomingData[0] == 0x09) {
-            scale = getScale(incomingData[1]);
-            new Thread(this::transformation).start();
+            new Thread(() -> {
+                scale(MathUtils.getScale(incomingData[1]));
+            }).start();
         }
     }
 
-    public void setModel(byte[] model) {
+    public void setShape(byte[] shape) {
+        if(!checkPreconditions()){
+            return;
+        }
+
         new Thread(() -> {
-            this.model = model;
-            refresh(this.model);
+            model = new ModelShape(rotation_py, shape);
+            refresh(model.getModel());
         }).start();
     }
 
-    public void computeMathEquation(String equation) {
-        this.equation = equation;
+    public void setGenericModel(byte[] genericModel) {
+        if(!checkPreconditions()){
+            return;
+        }
+
         new Thread(() -> {
-            model = equation_py.callAttr("compute", equation, 1, 0, 0, 0, fillIn).toJava(byte[].class);
-            refresh(model);
+            model = new ModelGeneric(genericModel);
+            refresh(model.getModel());
+        }).start();
+    }
+
+    public void computeMathEquation(String equation, int scale, int xoff, int yoff, int zoff) {
+        if(!checkPreconditions()){
+            return;
+        }
+
+        new Thread(() -> {
+            model = new ModelMath(equation_py,rotation_py, equation, scale, xoff, yoff, zoff, fillIn);
+            refresh(model.getModel());
         }).start();
     }
 
     public void rotate(int angle) {
+        if(!checkPreconditions()){
+            return;
+        }
+
         new Thread(() -> {
-            this.angle += angle;
-            refresh(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
+            refresh(model.rotate(angle));
         }).start();
     }
 
-    private void transformation() {
-        model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fillIn).toJava(byte[].class);
-        if(angle != 0){
-            refresh(rotation_py.callAttr("rotate", PyObject.fromJava(model), this.angle).toJava(byte[].class));
-        } else {
-            refresh(model);
+    public void translate_x(int x){
+        if(!checkPreconditions()){
+            return;
         }
+
+        new Thread(() -> {
+            refresh(model.translate_x(x));
+        }).start();
     }
 
-    private double getScale(int zoom){
-        if(zoom == 2) {
-            return .5;
+    public void translate_y(int y){
+        if(!checkPreconditions()){
+            return;
         }
-        else if(zoom == 3) {
-            return .25;
+
+        new Thread(() -> {
+            refresh(model.translate_y(y));
+        }).start();
+    }
+
+    public void translate_z(int z){
+        if(!checkPreconditions()){
+            return;
         }
-        else if(zoom == 5) {
-            return 2;
+
+        new Thread(() -> {
+            refresh(model.translate_z(z));
+        }).start();
+    }
+
+    public void scale(double scale) {
+        if(!checkPreconditions()){
+            return;
         }
-        else if(zoom == 6) {
-            return 4;
-        }
-        else {
-            return 1;
-        }
+
+        new Thread(() -> {
+            refresh(model.scale(scale));
+        }).start();
     }
 
     public void reset() {
-        angle = 0;
-        xoff = 0;
-        yoff = 0;
-        zoff = 0;
-        scale = 1;
-    }
+        if(!checkPreconditions()){
+            return;
+        }
 
-    public void setBrightness(int value) {
-        brightness = (byte) value;
-        refresh(model);
+        new Thread(() -> {
+            refresh(model.reset());
+        }).start();
     }
 
     private void refresh(byte[] data) {
-        if(isHandshakeComplete()) {
-            outgoingModel = LedMapping.mapLEDs(data, brightness);
-            refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
-        }
+        outgoingModel = LedMapping.mapLEDs(data, color, brightness);
+        refresh.postValue(Boolean.FALSE.equals(refresh.getValue()));
     }
 
     public void completeHandshake() {
         handshake = true;
-        refresh(model);
     }
 
     private boolean isHandshakeComplete() {
         return handshake;
     }
 
-    public void setFillIn(boolean fillIn) {
-        this.fillIn = fillIn;
-        new Thread(this::transformation).start();
-    }
-
     public void setColor(String color) {
         this.color = color;
-        refresh(model);
+
+        if(!checkPreconditions()){
+            return;
+        }
+
+        new Thread(() -> {
+            refresh(model.getModel());
+        }).start();
+    }
+
+    public void setBrightness(int value) {
+        brightness = (byte) value;
+
+        if(!checkPreconditions()){
+            return;
+        }
+
+        new Thread(() -> {
+            refresh(model.getModel());
+        }).start();
+    }
+
+    public void setPower(boolean power) {
+        if(this.power && !power) {
+            color = "off";
+            new Thread(() -> {
+                refresh(model.getModel());
+                this.power = false;
+            }).start();
+        }
+        else if(!this.power && power) {
+            if(color.equals("off")) {
+                color = "gl1";
+            }
+            new Thread(() -> {
+                refresh(model.getModel());
+                this.power = true;
+            }).start();
+        }
+    }
+
+    private boolean checkPreconditions() {
+        return power && handshake;
+    }
+
+    //TODO:
+    public void setFillIn(boolean fillIn) {
+        this.fillIn = fillIn;
     }
 }

@@ -45,7 +45,7 @@ public class UploadFragment extends Fragment {
         preset1.setOnClickListener(v -> {
             byte[] testData = new byte[4096];
             java.util.Arrays.fill(testData, 0, 4096, (byte) 0x00);
-            mainViewModel.setModel(testData);
+            mainViewModel.setGenericModel(testData);
         });
 
         ImageButton preset2 = binding.preset2;
@@ -65,22 +65,22 @@ public class UploadFragment extends Fragment {
 
         ImageButton preset5 = binding.preset5;
         preset5.setOnClickListener(v -> {
-            mainViewModel.setModel(cube);
+            mainViewModel.setShape(cube);
         });
 
         ImageButton preset6 = binding.preset6;
         preset6.setOnClickListener(v -> {
-            mainViewModel.setModel(sphere);
+            mainViewModel.setShape(sphere);
         });
 
         ImageButton preset7 = binding.preset7;
         preset7.setOnClickListener(v -> {
-            mainViewModel. setModel(cylinder);
+            mainViewModel.setShape(cylinder);
         });
 
         ImageButton preset8 = binding.preset8;
         preset8.setOnClickListener(v -> {
-            mainViewModel.setModel(rhomboid);
+            mainViewModel.setShape(rhomboid);
         });
     }
 

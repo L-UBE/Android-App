@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.l3d_cube.MainViewModel;
 import com.example.l3d_cube.databinding.FragmentDisplaySettingsBinding;
-import com.example.l3d_cube.databinding.FragmentMathBinding;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +25,8 @@ public class DisplaySettingsFragment extends Fragment {
     private MainViewModel mainViewModel;
 
     private SeekBar brightness;
+
+    private ToggleButton power;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +59,13 @@ public class DisplaySettingsFragment extends Fragment {
 
         });
 
+        power = binding.powerToggleButton;
+        power.setOnClickListener(view -> {
+            mainViewModel.setPower(power.isChecked());
+        });
+
+        setupColorPresets();
+
         return root;
     }
 
@@ -79,16 +88,25 @@ public class DisplaySettingsFragment extends Fragment {
         colorMap.put(binding.static15,"s15");
 
         colorMap.put(binding.gradientX1,"gx1");
-        colorMap.put(binding.gradientX1,"gx2");
-        colorMap.put(binding.gradientX1,"gx3");
+        colorMap.put(binding.gradientX2,"gx2");
+        colorMap.put(binding.gradientX3,"gx3");
+
         colorMap.put(binding.gradientY1,"gy1");
-        colorMap.put(binding.gradientY1,"gy2");
-        colorMap.put(binding.gradientY1,"gy3");
+        colorMap.put(binding.gradientY2,"gy2");
+        colorMap.put(binding.gradientY3,"gy3");
+
         colorMap.put(binding.gradientZ1,"gz1");
-        colorMap.put(binding.gradientZ1,"gz2");
-        colorMap.put(binding.gradientZ1,"gz3");
+        colorMap.put(binding.gradientZ2,"gz2");
+        colorMap.put(binding.gradientZ3,"gz3");
+
         colorMap.put(binding.gradientL1,"gl1");
-        colorMap.put(binding.gradientL1,"gl2");
+        colorMap.put(binding.gradientL2,"gl2");
+
+        for (Map.Entry<View, String> entry : colorMap.entrySet()) {
+            entry.getKey().setOnClickListener(view -> {
+                mainViewModel.setColor(entry.getValue());
+            });
+        }
     }
 
     @Override
