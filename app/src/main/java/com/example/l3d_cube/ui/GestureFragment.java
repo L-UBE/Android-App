@@ -1,33 +1,19 @@
 package com.example.l3d_cube.ui;
 
-import static com.example.l3d_cube.Model.PresetShapes.Cube.cube;
-import static com.example.l3d_cube.Model.PresetShapes.Cylinder.cylinder;
-import static com.example.l3d_cube.Model.PresetShapes.Rhomboid.rhomboid;
-import static com.example.l3d_cube.Model.PresetShapes.Sphere.sphere;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.GestureDetectorCompat;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.l3d_cube.MainViewModel;
 import com.example.l3d_cube.databinding.FragmentGestureBinding;
-import com.example.l3d_cube.gesture.GestureUtils;
 
 public class GestureFragment extends Fragment{
 
@@ -55,47 +41,50 @@ public class GestureFragment extends Fragment{
 //            return true;
 //        });
 
+        setupPresets();
+
         return root;
     }
 
     private void setupPresets() {
-        ImageButton preset1 = binding.preset1;
-        preset1.setOnClickListener(v -> {
-            mainViewModel.translate_x(1);
-        });
 
-        ImageButton preset2 = binding.preset2;
-        preset2.setOnClickListener(v -> {
+        binding.left.setOnClickListener(v -> {
             mainViewModel.translate_x(-1);
         });
 
-        ImageButton preset3 = binding.preset3;
-        preset3.setOnClickListener(v -> {
-            mainViewModel.translate_y(1);
+        binding.right.setOnClickListener(v -> {
+            mainViewModel.translate_x(1);
         });
 
-        ImageButton preset4 = binding.preset4;
-        preset4.setOnClickListener(v -> {
-            mainViewModel.translate_y(-1);
-        });
-
-        ImageButton preset5 = binding.preset5;
-        preset5.setOnClickListener(v -> {
+        binding.up.setOnClickListener(v -> {
             mainViewModel.translate_z(1);
         });
 
-        ImageButton preset6 = binding.preset6;
-        preset6.setOnClickListener(v -> {
+        binding.down.setOnClickListener(v -> {
             mainViewModel.translate_z(-1);
         });
 
-        ImageButton preset7 = binding.preset7;
-        preset7.setOnClickListener(v -> {
+        binding.backward.setOnClickListener(v -> {
+            mainViewModel.translate_y(-1);
+        });
+
+        binding.forward.setOnClickListener(v -> {
+            mainViewModel.translate_y(1);
+        });
+
+        binding.rotateLeft.setOnClickListener(v -> {
+            mainViewModel.rotate(-5);
+        });
+
+        binding.rotateRight.setOnClickListener(v -> {
+            mainViewModel.rotate(5);
+        });
+
+        binding.zoomIn.setOnClickListener(v -> {
             mainViewModel.scale(.5);
         });
 
-        ImageButton preset8 = binding.preset8;
-        preset8.setOnClickListener(v -> {
+        binding.zoomOut.setOnClickListener(v -> {
             mainViewModel.scale(2);
         });
     }

@@ -3,7 +3,7 @@ import numpy as np
 res = 16
 
 def translateShape(matrix, xoff, yoff, zoff):
-    matrix = matrix.reshape(res,res,res)
+    matrix = np.array(matrix).reshape(res,res,res)
     shifted_matrix = np.zeros_like(matrix)
     shifted_matrix[max(0, xoff):min(res, res + xoff),
     max(0, yoff):min(res, res + yoff),
