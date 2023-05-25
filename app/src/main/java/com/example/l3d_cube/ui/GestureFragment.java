@@ -73,11 +73,11 @@ public class GestureFragment extends Fragment{
         });
 
         binding.rotateLeft.setOnClickListener(v -> {
-            mainViewModel.rotate(-5);
+            mainViewModel.rotate("z", -5);
         });
 
         binding.rotateRight.setOnClickListener(v -> {
-            mainViewModel.rotate(5);
+            mainViewModel.rotate("z", 5);
         });
 
         binding.zoomIn.setOnClickListener(v -> {

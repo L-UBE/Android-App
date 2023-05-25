@@ -9,7 +9,7 @@ public class ModelGeneric extends Model{
     }
 
     @Override
-    public byte[] rotate(int angle) {
+    public byte[] rotate(String axis, int angle) {
         return model;
     }
 

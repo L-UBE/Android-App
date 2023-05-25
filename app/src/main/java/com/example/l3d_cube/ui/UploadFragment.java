@@ -55,12 +55,12 @@ public class UploadFragment extends Fragment {
 
         ImageButton preset3 = binding.preset3;
         preset3.setOnClickListener(v -> {
-            mainViewModel.rotate(-5);
+            mainViewModel.rotate("z", -5);
         });
 
         ImageButton preset4 = binding.preset4;
         preset4.setOnClickListener(v -> {
-            mainViewModel.rotate(5);
+            mainViewModel.rotate("z", 5);
         });
 
         ImageButton preset5 = binding.preset5;

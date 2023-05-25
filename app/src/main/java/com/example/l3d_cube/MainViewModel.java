@@ -77,18 +77,22 @@ public class MainViewModel extends AndroidViewModel {
 
         // ROTATE X
         else if(incomingData[0] == 0x06) {
-            return;
+            new Thread(() -> {
+                rotate("x", incomingData[1]*10);
+            }).start();
         }
 
         // ROTATE Y
         else if(incomingData[0] == 0x07) {
-            return;
+            new Thread(() -> {
+                rotate("y", incomingData[1]*10);
+            }).start();
         }
 
         // ROTATE Z
         else if(incomingData[0] == 0x08) {
             new Thread(() -> {
-                rotate(incomingData[1]*10);
+                rotate("z", incomingData[1]*10);
             }).start();
         }
 
@@ -132,13 +136,13 @@ public class MainViewModel extends AndroidViewModel {
         }).start();
     }
 
-    public void rotate(int angle) {
+    public void rotate(String axis, int angle) {
         if(!checkPreconditions()){
             return;
         }
 
         new Thread(() -> {
-            refresh(model.rotate(angle));
+            refresh(model.rotate(axis, angle));
         }).start();
     }
 

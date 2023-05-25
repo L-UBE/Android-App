@@ -790,18 +790,18 @@ public class LedMapping {
 	};
 
 	public static byte[] mapLEDs(byte[] unmappedLEDs, String color, byte brightness) {
-		byte[] coloredLEDs = LedColor.color(unmappedLEDs, "s1");
-		return coloredLEDs;
-//		byte[] coloredLEDs = LedColor.color(unmappedLEDs, color);
-//		byte[] mappedLEDs = new byte[resolution*resolution*resolution];
-//
-//		for (int i = 0; i < unmappedLEDs.length; i++) {
-//			short hash = LEDhash[i];
-//			int index = getMappedIndex(hash);
-//			mappedLEDs[index] = coloredLEDs[i];
-//		}
-//
-//		return compress(mappedLEDs, brightness);
+//		byte[] coloredLEDs = LedColor.color(unmappedLEDs, "s1");
+//		return coloredLEDs;
+		byte[] coloredLEDs = LedColor.color(unmappedLEDs, color);
+		byte[] mappedLEDs = new byte[resolution*resolution*resolution];
+
+		for (int i = 0; i < unmappedLEDs.length; i++) {
+			short hash = LEDhash[i];
+			int index = getMappedIndex(hash);
+			mappedLEDs[index] = coloredLEDs[i];
+		}
+
+		return compress(mappedLEDs, brightness);
 	}
 
 	private static int getMappedIndex(short hash) {
