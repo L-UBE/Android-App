@@ -1,7 +1,6 @@
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
 from sympy import *
 import numpy as np
-import sage
 
 transformations = (standard_transformations + (implicit_multiplication_application,) + (convert_xor,))
 
@@ -50,7 +49,7 @@ def compute(equation, scale, xoff, yoff, zoff, shouldFillIn):
     for x, x_scaled in enumerate(scaled_points):
         for y, y_scaled in enumerate(scaled_points):
 
-            z = solveset(equation(x_scaled + xoff, y_scaled + yoff),
+            z = solveset(equation(x_scaled - xoff, y_scaled - yoff),
                          domain=S.Reals).args
             for root in z:
                 index = round(root + zoff, scale, scaled_points)

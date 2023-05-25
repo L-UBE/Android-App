@@ -2,27 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:weightSum="7">
+    android:weightSum="10">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="8"
-        android:layout_weight="2">
+        android:layout_weight="3">
 
-        <Button
-            android:id="@+id/rotate_left"
-            android:text="Rotate Left"
-            android:textSize="25sp"
-            android:layout_margin="5dp"
-            android:backgroundTint="@color/gray3"
-            android:layout_weight="2"
-            android:gravity="center"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"/>
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_weight="2">
+
+            <Button
+                android:id="@+id/rotate_left_x"
+                android:text="X"
+                android:textSize="25sp"
+                android:layout_margin="1dp"
+                android:backgroundTint="@color/gray3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/rotate_left_y"
+                android:text="Y"
+                android:textSize="25sp"
+                android:layout_margin="1dp"
+                android:backgroundTint="@color/gray3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/rotate_left_z"
+                android:text="Z"
+                android:textSize="25sp"
+                android:layout_margin="1dp"
+                android:backgroundTint="@color/gray3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/left"
@@ -53,7 +83,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="6"
-        android:layout_weight="3">
+        android:layout_weight="4">
 
         <Button
             android:id="@+id/zoom_in"
@@ -106,18 +136,49 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="8"
-        android:layout_weight="2">
+        android:layout_weight="3">
 
-        <Button
-            android:id="@+id/rotate_right"
-            android:text="Rotate Right"
-            android:textSize="25sp"
-            android:layout_margin="5dp"
-            android:backgroundTint="@color/gray3"
-            android:layout_weight="2"
-            android:gravity="center"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"/>
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_weight="2">
+
+            <Button
+                android:id="@+id/rotate_right_x"
+                android:text="X"
+                android:textSize="25sp"
+                android:layout_margin="1dp"
+                android:backgroundTint="@color/gray3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/rotate_right_y"
+                android:text="Y"
+                android:textSize="25sp"
+                android:layout_margin="1dp"
+                android:backgroundTint="@color/gray3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/rotate_right_z"
+                android:text="Z"
+                android:textSize="25sp"
+                android:layout_margin="1dp"
+                android:backgroundTint="@color/gray3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/right"

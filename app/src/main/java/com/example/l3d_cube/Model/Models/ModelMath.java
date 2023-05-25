@@ -38,46 +38,50 @@ public class ModelMath extends Model {
 
     @Override
     public byte[] rotate(String axis, int angle) {
-        if(axis.equals("x")) {
-            angle_x += angle;
+        switch (axis) {
+            case "x":
+                angle_x += angle;
+                angle_x %= 360;
+                break;
+            case "y":
+                angle_y += angle;
+                angle_y %= 360;
+                break;
+            case "z":
+                angle_z += angle;
+                angle_z %= 360;
+                break;
         }
 
-        else if(axis.equals("y")) {
-            angle_y += angle;
-        }
-
-        else if(axis.equals("z")) {
-            angle_z += angle;
-        }
-        return rotation_py.callAttr("rotate", PyObject.fromJava(model), axis, getAngleValue(axis)).toJava(byte[].class);
+        return rotate();
     }
 
     @Override
     public byte[] translate_x(int x) {
         this.xoff += x;
-        model = equation_py.callAttr("compute", this.equation, this.scale, this.xoff, this.yoff, this.zoff, this.fillIn).toJava(byte[].class);
-        return performPostRotation();
+        model = transform();
+        return rotate();
     }
 
     @Override
     public byte[] translate_y(int y) {
         this.yoff += y;
-        model = equation_py.callAttr("compute", this.equation, this.scale, this.xoff, this.yoff, this.zoff, this.fillIn).toJava(byte[].class);
-        return performPostRotation();
+        model = transform();
+        return rotate();
     }
 
     @Override
     public byte[] translate_z(int z) {
         this.zoff += z;
-        model = equation_py.callAttr("compute", this.equation, this.scale, this.xoff, this.yoff, this.zoff, this.fillIn).toJava(byte[].class);
-        return performPostRotation();
+        model = transform();
+        return rotate();
     }
 
     @Override
     public byte[] scale(double scale) {
         this.scale = scale;
-        model = equation_py.callAttr("compute", this.equation, this.scale, this.xoff, this.yoff, this.zoff, this.fillIn).toJava(byte[].class);
-        return performPostRotation();
+        model = transform();
+        return rotate();
     }
 
     @Override
@@ -85,10 +89,13 @@ public class ModelMath extends Model {
         angle_x = 0;
         angle_y = 0;
         angle_z = 0;
+
         xoff = 0;
         yoff = 0;
         zoff = 0;
+
         scale = 1;
+
         model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fillIn).toJava(byte[].class);
         return model;
     }
@@ -98,27 +105,25 @@ public class ModelMath extends Model {
         return model;
     }
 
-    private byte[] performPostRotation() {
+    private byte[] rotate() {
+        byte[] rotatedModel = model;
+
         if(angle_x != 0) {
-            return rotate("x", angle_x);
+            rotatedModel = rotation_py.callAttr("rotate", PyObject.fromJava(rotatedModel), "x", angle_x).toJava(byte[].class);
         }
+
         if(angle_y != 0) {
-            return rotate("y", angle_y);
+            rotatedModel = rotation_py.callAttr("rotate", PyObject.fromJava(rotatedModel), "y", angle_y).toJava(byte[].class);
         }
+
         if(angle_z != 0) {
-            return rotate("z", angle_z);
+            rotatedModel = rotation_py.callAttr("rotate", PyObject.fromJava(rotatedModel), "z", angle_z).toJava(byte[].class);
         }
-        return model;
+
+        return rotatedModel;
     }
 
-    private int getAngleValue(String axis) {
-        switch (axis) {
-            case "x":
-                return angle_x;
-            case "y":
-                return angle_y;
-            default:
-                return angle_z;
-        }
+    private byte[] transform() {
+        return equation_py.callAttr("compute", this.equation, this.scale, this.xoff, this.yoff, this.zoff, this.fillIn).toJava(byte[].class);
     }
 }

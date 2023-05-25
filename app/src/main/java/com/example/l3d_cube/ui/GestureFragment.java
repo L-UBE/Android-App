@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,7 +17,6 @@ import com.example.l3d_cube.databinding.FragmentGestureBinding;
 public class GestureFragment extends Fragment{
 
     private FragmentGestureBinding binding;
-    private Context context;
     private MainViewModel mainViewModel;
 
 //    private GestureDetectorCompat motionDetector;
@@ -31,8 +29,6 @@ public class GestureFragment extends Fragment{
         View root = binding.getRoot();
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-
-        context = getActivity();
 
 //        motionDetector = new GestureDetectorCompat(context, new GestureListener());
 //
@@ -72,11 +68,27 @@ public class GestureFragment extends Fragment{
             mainViewModel.translate_y(1);
         });
 
-        binding.rotateLeft.setOnClickListener(v -> {
+        binding.rotateLeftX.setOnClickListener(v -> {
+            mainViewModel.rotate("x", -5);
+        });
+
+        binding.rotateLeftY.setOnClickListener(v -> {
+            mainViewModel.rotate("y", -5);
+        });
+
+        binding.rotateLeftZ.setOnClickListener(v -> {
             mainViewModel.rotate("z", -5);
         });
 
-        binding.rotateRight.setOnClickListener(v -> {
+        binding.rotateRightX.setOnClickListener(v -> {
+            mainViewModel.rotate("x", 5);
+        });
+
+        binding.rotateRightY.setOnClickListener(v -> {
+            mainViewModel.rotate("y", 5);
+        });
+
+        binding.rotateRightZ.setOnClickListener(v -> {
             mainViewModel.rotate("z", 5);
         });
 

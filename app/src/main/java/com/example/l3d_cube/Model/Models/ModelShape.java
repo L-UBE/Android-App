@@ -5,6 +5,7 @@ import com.chaquo.python.PyObject;
 public class ModelShape extends Model {
 
     private byte[] model;
+    private byte[] rotatedModel;
 
     private PyObject rotation_py;
     private PyObject transformation_shape_py;
@@ -19,6 +20,7 @@ public class ModelShape extends Model {
 
     public ModelShape(PyObject rotation_py, PyObject transformation_shape_py, byte[] model) {
         this.model = model;
+        rotatedModel = this.model;
 
         this.rotation_py = rotation_py;
         this.transformation_shape_py = transformation_shape_py;
@@ -26,39 +28,54 @@ public class ModelShape extends Model {
 
     @Override
     public byte[] rotate(String axis, int angle) {
-        if(axis.equals("x")) {
-            angle_x += angle;
+        switch (axis) {
+            case "x":
+                angle_x += angle;
+                angle_x %= 360;
+                break;
+            case "y":
+                angle_y += angle;
+                angle_y %= 360;
+                break;
+            case "z":
+                angle_z += angle;
+                angle_z %= 360;
+                break;
         }
 
-        else if(axis.equals("y")) {
-            angle_y += angle;
+        rotatedModel = model;
+
+        if(angle_x != 0) {
+            rotatedModel = rotation_py.callAttr("rotate", PyObject.fromJava(rotatedModel), "x", angle_x).toJava(byte[].class);
         }
 
-        else if(axis.equals("z")) {
-            angle_z += angle;
+        if(angle_y != 0) {
+            rotatedModel = rotation_py.callAttr("rotate", PyObject.fromJava(rotatedModel), "y", angle_y).toJava(byte[].class);
         }
-        return rotation_py.callAttr("rotate", PyObject.fromJava(model), axis, getAngleValue(axis)).toJava(byte[].class);
+
+        if(angle_z != 0) {
+            rotatedModel = rotation_py.callAttr("rotate", PyObject.fromJava(rotatedModel), "z", angle_z).toJava(byte[].class);
+        }
+
+        return transform();
     }
 
     @Override
     public byte[] translate_x(int x) {
         this.xoff += x;
-        model = transformation_shape_py.callAttr("translateShape", model, xoff, yoff, zoff).toJava(byte[].class);
-        return performPostRotation();
+        return transform();
     }
 
     @Override
     public byte[] translate_y(int y) {
         this.yoff += y;
-        model = transformation_shape_py.callAttr("translateShape", model, xoff, yoff, zoff).toJava(byte[].class);
-        return performPostRotation();
+        return transform();
     }
 
     @Override
     public byte[] translate_z(int z) {
         this.zoff += z;
-        model = transformation_shape_py.callAttr("translateShape", model, xoff, yoff, zoff).toJava(byte[].class);
-        return performPostRotation();
+        return transform();
     }
 
     @Override
@@ -71,38 +88,23 @@ public class ModelShape extends Model {
         angle_x = 0;
         angle_y = 0;
         angle_z = 0;
+
         xoff = 0;
         yoff = 0;
         zoff = 0;
+
+        rotatedModel = model;
+
         return model;
     }
+
+    private byte[] transform() {
+        return transformation_shape_py.callAttr("translateShape", rotatedModel, xoff, yoff, zoff).toJava(byte[].class);
+    }
+
 
     @Override
     public byte[] getModel() {
         return model;
-    }
-
-    private byte[] performPostRotation() {
-        if(angle_x != 0) {
-            return rotate("x", angle_x);
-        }
-        if(angle_y != 0) {
-            return rotate("y", angle_y);
-        }
-        if(angle_z != 0) {
-            return rotate("z", angle_z);
-        }
-        return model;
-    }
-
-    private int getAngleValue(String axis) {
-        switch (axis) {
-            case "x":
-                return angle_x;
-            case "y":
-                return angle_y;
-            default:
-                return angle_z;
-        }
     }
 }
