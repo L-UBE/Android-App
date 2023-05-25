@@ -172,49 +172,49 @@ public class LedColor {
                 coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x00);
                 break;
             case "s1":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x01);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0F);
                 break;
             case "s2":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x02);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0D);
                 break;
             case "s3":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x03);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0E);
                 break;
             case "s4":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x04);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0C);
                 break;
             case "s5":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x05);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0B);
                 break;
             case "s6":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x06);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0A);
                 break;
             case "s7":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x07);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x09);
                 break;
             case "s8":
                 coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x08);
                 break;
             case "s9":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x09);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x07);
                 break;
             case "s10":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0A);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x06);
                 break;
             case "s11":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0B);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x05);
                 break;
             case "s12":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0C);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x04);
                 break;
             case "s13":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0D);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x03);
                 break;
             case "s14":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0E);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x02);
                 break;
             case "s15":
-                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x0F);
+                coloredLEDs = setStaticColor(uncoloredLEDs, (byte) 0x01);
                 break;
 
             case "gx1":

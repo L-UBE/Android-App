@@ -27,8 +27,8 @@ android {
                 install "sympy"
                 install "sage"
             }
-            buildPython "C:/Users/Sachen Sampath/AppData/Local/Programs/Python/Python38/python.exe"
-//            buildPython "/usr/bin/python3"
+//            buildPython "C:/Users/Sachen Sampath/AppData/Local/Programs/Python/Python38/python.exe"
+            buildPython "/usr/bin/python3"
         }
 
         sourceSets {

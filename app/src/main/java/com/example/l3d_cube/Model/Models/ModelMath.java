@@ -100,13 +100,13 @@ public class ModelMath extends Model {
 
     private byte[] performPostRotation() {
         if(angle_x != 0) {
-            return rotate("x", 0);
+            return rotate("x", angle_x);
         }
         if(angle_y != 0) {
-            return rotate("y", 0);
+            return rotate("y", angle_y);
         }
         if(angle_z != 0) {
-            return rotate("z", 0);
+            return rotate("z", angle_z);
         }
         return model;
     }

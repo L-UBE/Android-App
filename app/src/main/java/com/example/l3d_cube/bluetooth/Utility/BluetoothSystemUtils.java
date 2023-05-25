@@ -202,7 +202,7 @@ public class BluetoothSystemUtils {
                         message,
                         R.drawable.bluetooth_settings,
                         es.dmoral.toasty.R.color.infoColor ,
-                        Toast.LENGTH_LONG,
+                        Toast.LENGTH_SHORT,
                         true,
                         true)
                 .show();

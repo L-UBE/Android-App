@@ -76,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mainViewModel.refresh.observe(this, outgoingData -> {
-            BluetoothSystemUtils.bluetoothInfoToast(this, "Data transmitted to Cube");
             bluetoothMCUViewModel.write(mainViewModel.outgoingModel);
         });
 
         bluetoothMCUViewModel = new ViewModelProvider(this).get(BluetoothMCUViewModel.class);
         bluetoothMCUViewModel.incomingData().observe(this, incomingData -> {
+            BluetoothSystemUtils.bluetoothInfoToast(this, "Data received from Cube: " + Arrays.toString(incomingData));
             if(incomingData[0] == -36 && incomingData[1] == -70){
                 byte[] handshake = {(byte) 0xAB, (byte) 0xCD};
                 bluetoothMCUViewModel.write(handshake);
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         autoConnect();
 
-        mainViewModel.completeHandshake();
+//        mainViewModel.completeHandshake();
     }
 
     public void startAsyncAnimation() {
