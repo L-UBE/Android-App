@@ -65,22 +65,22 @@ public class UploadFragment extends Fragment {
 
         ImageButton preset5 = binding.preset5;
         preset5.setOnClickListener(v -> {
-            mainViewModel.setShape(cube);
+            mainViewModel.setShape("cube");
         });
 
         ImageButton preset6 = binding.preset6;
         preset6.setOnClickListener(v -> {
-            mainViewModel.setShape(sphere);
+            mainViewModel.setShape("sphere");
         });
 
         ImageButton preset7 = binding.preset7;
         preset7.setOnClickListener(v -> {
-            mainViewModel.setShape(cylinder);
+            mainViewModel.setShape("cylinder");
         });
 
         ImageButton preset8 = binding.preset8;
         preset8.setOnClickListener(v -> {
-            mainViewModel.setShape(rhomboid);
+            mainViewModel.setShape("rhomboid");
         });
     }
 

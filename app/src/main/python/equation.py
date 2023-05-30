@@ -43,24 +43,33 @@ def compute(equation, scale, xoff, yoff, zoff, shouldFillIn):
 
     x_var, y_var = symbols('x y')
 
-    equation = parse_expr(equation, transformations=transformations, evaluate=False)
+    try:
+        equation = parse_expr(
+            equation, transformations=transformations, evaluate=False)
+    except:
+        return computed_points
+
     equation = lambdify((x_var, y_var), equation)
 
     for x, x_scaled in enumerate(scaled_points):
         for y, y_scaled in enumerate(scaled_points):
 
-            z = solveset(equation(x_scaled - xoff, y_scaled - yoff),
-                         domain=S.Reals).args
+            try:
+                z = solveset(equation(x_scaled - xoff, y_scaled - yoff),
+                             domain=S.Reals).args
+            except:
+                return computed_points
+
             for root in z:
                 index = round(root + zoff, scale, scaled_points)
-                if(index):
+                if (index):
                     if (isinstance(index, int)):
                         computed_points[256*x + 16*y + index] = 1
                     elif (isinstance(index, tuple)):
                         computed_points[256*x + 16*y + index[0]] = 1
                         computed_points[256*x + 16*y + index[1]] = 1
 
-    if(shouldFillIn):
+    if (shouldFillIn):
         return fill_in(computed_points)
     else:
         return computed_points

@@ -69,11 +69,7 @@ public class MathFragment extends Fragment {
             yoffset = MathUtils.parseEditText(binding.yoffset);
             zoffset = MathUtils.parseEditText(binding.zoffset);
             String eq = equation.getText().toString();
-            if(MathUtils.validateEquation(eq)) {
-                mainViewModel.computeMathEquation(eq, scale, xoffset, yoffset, zoffset);
-            } else {
-                SystemUtils.systemErrorToast(context, "Invalid expression");
-            }
+            mainViewModel.computeMathEquation(eq, scale, xoffset, yoffset, zoffset);
         });
 
         fillin.setOnClickListener(view -> {

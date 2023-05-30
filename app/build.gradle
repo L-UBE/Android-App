@@ -25,6 +25,7 @@ android {
             pip {
                 install "scipy"
                 install "sympy"
+                install "raster-geometry"
             }
             buildPython "C:/Users/Sachen Sampath/AppData/Local/Programs/Python/Python38/python.exe"
 //            buildPython "/usr/bin/python3"

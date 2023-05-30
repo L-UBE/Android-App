@@ -4,11 +4,13 @@ import com.chaquo.python.PyObject;
 
 public class ModelShape extends Model {
 
+    private String shape;
+    private int size = 12;
     private byte[] model;
     private byte[] rotatedModel;
 
     private PyObject rotation_py;
-    private PyObject transformation_shape_py;
+    private PyObject shape_py;
 
     private int xoff = 0;
     private int yoff = 0;
@@ -18,12 +20,13 @@ public class ModelShape extends Model {
     private int angle_y = 0;
     private int angle_z = 0;
 
-    public ModelShape(PyObject rotation_py, PyObject transformation_shape_py, byte[] model) {
-        this.model = model;
+    public ModelShape(PyObject rotation_py, PyObject shape_py, String shape) {
+        this.shape = shape;
+        this.model = shape_py.callAttr("generateShape", this.shape, size).toJava(byte[].class);;
         rotatedModel = this.model;
 
         this.rotation_py = rotation_py;
-        this.transformation_shape_py = transformation_shape_py;
+        this.shape_py = shape_py;
     }
 
     @Override
@@ -99,7 +102,7 @@ public class ModelShape extends Model {
     }
 
     private byte[] transform() {
-        return transformation_shape_py.callAttr("translateShape", rotatedModel, xoff, yoff, zoff).toJava(byte[].class);
+        return shape_py.callAttr("translateShape", rotatedModel, xoff, yoff, zoff).toJava(byte[].class);
     }
 
 

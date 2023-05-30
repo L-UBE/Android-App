@@ -20,7 +20,7 @@ public class MainViewModel extends AndroidViewModel {
     private Python py;
     private PyObject rotation_py;
     private PyObject equation_py;
-    private PyObject transformation_shape_py;
+    private PyObject shape_py;
 
     private boolean handshake = false;
 
@@ -39,9 +39,9 @@ public class MainViewModel extends AndroidViewModel {
         py = Python.getInstance();
         rotation_py = py.getModule("rotation");
         equation_py = py.getModule("equation");
-        transformation_shape_py = py.getModule("transformation_shape");
+        shape_py = py.getModule("shape");
 
-        model = new ModelShape(rotation_py, transformation_shape_py, Cube.cube);
+        model = new ModelShape(rotation_py, shape_py, "cube");
     }
 
     public void handleIncomingBluetoothData(byte[] incomingData) {
@@ -101,15 +101,21 @@ public class MainViewModel extends AndroidViewModel {
                 scale(MathUtils.getScale(incomingData[1]));
             }).start();
         }
+
+        else if(incomingData[0] == 0x10) {
+            new Thread(() -> {
+                reset();
+            }).start();
+        }
     }
 
-    public void setShape(byte[] shape) {
+    public void setShape(String shape) {
         if(!checkPreconditions()){
             return;
         }
 
         new Thread(() -> {
-            model = new ModelShape(rotation_py, transformation_shape_py, shape);
+            model = new ModelShape(rotation_py, shape_py, shape);
             refresh(model.getModel());
         }).start();
     }
