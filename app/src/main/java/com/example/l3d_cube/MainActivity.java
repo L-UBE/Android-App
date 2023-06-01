@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private AppBarLayout appBarLayout;
     private Menu menu;
 
-    private boolean guard = true;
-
     // Bluetooth Variables
     private final String BTAG = "Bluetooth: ";
 
@@ -84,11 +82,10 @@ public class MainActivity extends AppCompatActivity {
         bluetoothMCUViewModel = new ViewModelProvider(this).get(BluetoothMCUViewModel.class);
         bluetoothMCUViewModel.incomingData().observe(this, incomingData -> {
             BluetoothSystemUtils.bluetoothInfoToast(this, "Data received from Cube: " + Arrays.toString(incomingData));
-            if(incomingData[0] == -36 && incomingData[1] == -70 && guard){
+            if(incomingData[0] == -36 && incomingData[1] == -70 && !mainViewModel.isHandshakeComplete()){
                 byte[] handshake = {(byte) 0xAB};
                 bluetoothMCUViewModel.write(handshake);
                 mainViewModel.completeHandshake();
-                guard = false;
             }
         });
         bluetoothMCUViewModel.connectionStatus().observe(this, connectionStatus -> {
@@ -113,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         autoConnect();
 
-//        mainViewModel.completeHandshake();
+        mainViewModel.completeHandshake();
     }
 
     public void startAsyncAnimation() {

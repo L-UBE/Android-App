@@ -1,31 +1,20 @@
 package com.example.l3d_cube.ui;
 
-import static com.scichart.core.utility.Dispatcher.runOnUiThread;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.l3d_cube.MainViewModel;
-import com.example.l3d_cube.Utility.ArrayUtils;
 import com.example.l3d_cube.Utility.MathUtils;
-import com.example.l3d_cube.Utility.SystemUtils;
 import com.example.l3d_cube.databinding.FragmentMathBinding;
-
-import org.mariuszgromada.math.mxparser.Argument;
-import org.mariuszgromada.math.mxparser.Expression;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +73,7 @@ public class MathFragment extends Fragment {
         buttonMap.put(binding.six, "6");
         buttonMap.put(binding.five, "5");
         buttonMap.put(binding.four, "4");
+        buttonMap.put(binding.three, "3");
         buttonMap.put(binding.two, "2");
         buttonMap.put(binding.one, "1");
         buttonMap.put(binding.zero, "0");

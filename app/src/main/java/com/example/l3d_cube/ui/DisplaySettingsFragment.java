@@ -21,7 +21,6 @@ import java.util.Map;
 public class DisplaySettingsFragment extends Fragment {
 
     private FragmentDisplaySettingsBinding binding;
-    private Context context;
     private MainViewModel mainViewModel;
 
     private SeekBar brightness;
@@ -35,8 +34,6 @@ public class DisplaySettingsFragment extends Fragment {
         View root = binding.getRoot();
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-
-        context = getContext();
 
         brightness = binding.brightnessSeekBar;
         brightness.setOnSeekBarChangeListener( new SeekBar.OnSeekBarChangeListener() {

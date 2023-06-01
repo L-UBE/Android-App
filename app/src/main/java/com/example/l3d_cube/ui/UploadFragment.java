@@ -1,10 +1,5 @@
 package com.example.l3d_cube.ui;
 
-import static com.example.l3d_cube.Model.PresetShapes.Cube.cube;
-import static com.example.l3d_cube.Model.PresetShapes.Cylinder.cylinder;
-import static com.example.l3d_cube.Model.PresetShapes.Rhomboid.rhomboid;
-import static com.example.l3d_cube.Model.PresetShapes.Sphere.sphere;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +17,6 @@ import com.example.l3d_cube.databinding.FragmentUploadBinding;
 public class UploadFragment extends Fragment {
 
     private FragmentUploadBinding binding;
-    private Context context;
     private MainViewModel mainViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -32,8 +26,6 @@ public class UploadFragment extends Fragment {
         View root = binding.getRoot();
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-
-        context = getContext();
 
         setupPresets();
 

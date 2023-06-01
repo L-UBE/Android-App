@@ -13,7 +13,6 @@ import com.example.l3d_cube.Model.Models.Model;
 import com.example.l3d_cube.Model.Models.ModelGeneric;
 import com.example.l3d_cube.Model.Models.ModelMath;
 import com.example.l3d_cube.Model.Models.ModelShape;
-import com.example.l3d_cube.Model.PresetShapes.Cube;
 import com.example.l3d_cube.Utility.MathUtils;
 
 public class MainViewModel extends AndroidViewModel {
@@ -213,7 +212,7 @@ public class MainViewModel extends AndroidViewModel {
         handshake = true;
     }
 
-    private boolean isHandshakeComplete() {
+    public boolean isHandshakeComplete() {
         return handshake;
     }
 
