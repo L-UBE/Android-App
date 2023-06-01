@@ -34,10 +34,7 @@ import java.util.Map;
 public class MathFragment extends Fragment {
 
     private FragmentMathBinding binding;
-    private Context context;
     private MainViewModel mainViewModel;
-
-    private final int RESOLUTION_LIMIT = 1000;
 
     private TextView equation;
     private String userInput = "";
@@ -54,8 +51,6 @@ public class MathFragment extends Fragment {
         View root = binding.getRoot();
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-
-        context = getContext();
 
         equation = binding.mathEquation;
         fillin = binding.fillInToggleButton;
@@ -89,7 +84,6 @@ public class MathFragment extends Fragment {
         buttonMap.put(binding.six, "6");
         buttonMap.put(binding.five, "5");
         buttonMap.put(binding.four, "4");
-        buttonMap.put(binding.three, "3");
         buttonMap.put(binding.two, "2");
         buttonMap.put(binding.one, "1");
         buttonMap.put(binding.zero, "0");
@@ -102,7 +96,7 @@ public class MathFragment extends Fragment {
         buttonMap.put(binding.x, "x");
         buttonMap.put(binding.y, "y");
         buttonMap.put(binding.z, "z");
-        buttonMap.put(binding.e, "e");
+        buttonMap.put(binding.e, "E");
         buttonMap.put(binding.pi, "pi");
         buttonMap.put(binding.par1, "(");
         buttonMap.put(binding.par2, ")");

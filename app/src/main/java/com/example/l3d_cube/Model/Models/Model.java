@@ -5,7 +5,7 @@ public abstract class Model {
     public abstract byte[] translate_x(int x);
     public abstract byte[] translate_y(int y);
     public abstract byte[] translate_z(int z);
-    public abstract byte[] scale(double scale);
+    public abstract byte[] scale(int scale);
     public abstract byte[] reset();
     public abstract byte[] getModel();
 }

@@ -29,7 +29,7 @@ public class ModelGeneric extends Model{
     }
 
     @Override
-    public byte[] scale(double scale) {
+    public byte[] scale(int scale) {
         return model;
     }
 

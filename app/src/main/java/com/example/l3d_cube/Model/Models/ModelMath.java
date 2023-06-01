@@ -5,6 +5,7 @@ import com.chaquo.python.PyObject;
 public class ModelMath extends Model {
 
     private byte[] model;
+    private byte[] rotated_model;
 
     private PyObject rotation_py;
     private PyObject equation_py;
@@ -34,6 +35,7 @@ public class ModelMath extends Model {
         this.fillIn = fillIn;
 
         model = equation_py.callAttr("compute", this.equation, this.scale, this.xoff, this.yoff, this.zoff, this.fillIn).toJava(byte[].class);
+        rotated_model = model;
     }
 
     @Override
@@ -53,35 +55,46 @@ public class ModelMath extends Model {
                 break;
         }
 
-        return rotate();
+        rotated_model = rotate();
+        return rotated_model;
     }
 
     @Override
     public byte[] translate_x(int x) {
         this.xoff += x;
         model = transform();
-        return rotate();
+        rotated_model = rotate();
+        return rotated_model;
     }
 
     @Override
     public byte[] translate_y(int y) {
         this.yoff += y;
         model = transform();
-        return rotate();
+        rotated_model = rotate();
+        return rotated_model;
     }
 
     @Override
     public byte[] translate_z(int z) {
         this.zoff += z;
         model = transform();
-        return rotate();
+        rotated_model = rotate();
+        return rotated_model;
     }
 
     @Override
-    public byte[] scale(double scale) {
-        this.scale = scale;
+    public byte[] scale(int scale) {
+        if(scale == 2) {
+            this.scale /= 2;
+        }
+        else if(scale == -2) {
+            this.scale *= 2;
+        }
+
         model = transform();
-        return rotate();
+        rotated_model = rotate();
+        return rotated_model;
     }
 
     @Override
@@ -97,12 +110,13 @@ public class ModelMath extends Model {
         scale = 1;
 
         model = equation_py.callAttr("compute", equation, scale, xoff, yoff, zoff, fillIn).toJava(byte[].class);
-        return model;
+        rotated_model = model;
+        return rotated_model;
     }
 
     @Override
     public byte[] getModel() {
-        return model;
+        return rotated_model;
     }
 
     private byte[] rotate() {

@@ -6,6 +6,8 @@ public class ModelShape extends Model {
 
     private String shape;
     private int size = 12;
+
+    private byte[] original_model;
     private byte[] model;
     private byte[] rotatedModel;
 
@@ -22,8 +24,9 @@ public class ModelShape extends Model {
 
     public ModelShape(PyObject rotation_py, PyObject shape_py, String shape) {
         this.shape = shape;
-        this.model = shape_py.callAttr("generateShape", this.shape, size).toJava(byte[].class);;
-        rotatedModel = this.model;
+        this.original_model = shape_py.callAttr("generateShape", this.shape, size).toJava(byte[].class);
+        model = original_model;
+        rotatedModel = model;
 
         this.rotation_py = rotation_py;
         this.shape_py = shape_py;
@@ -46,7 +49,11 @@ public class ModelShape extends Model {
                 break;
         }
 
-        rotatedModel = model;
+        return rotate();
+    }
+
+    private byte[] rotate() {
+        rotatedModel = original_model;
 
         if(angle_x != 0) {
             rotatedModel = rotation_py.callAttr("rotate", PyObject.fromJava(rotatedModel), "x", angle_x).toJava(byte[].class);
@@ -60,30 +67,44 @@ public class ModelShape extends Model {
             rotatedModel = rotation_py.callAttr("rotate", PyObject.fromJava(rotatedModel), "z", angle_z).toJava(byte[].class);
         }
 
-        return transform();
+        model = transform();
+        return model;
     }
 
     @Override
     public byte[] translate_x(int x) {
         this.xoff += x;
-        return transform();
+        model = transform();
+        return model;
     }
 
     @Override
     public byte[] translate_y(int y) {
         this.yoff += y;
-        return transform();
+        model = transform();
+        return model;
     }
 
     @Override
     public byte[] translate_z(int z) {
         this.zoff += z;
-        return transform();
+        model = transform();
+        return model;
     }
 
     @Override
-    public byte[] scale(double scale) {
-        return model;
+    public byte[] scale(int scale) {
+        size += scale;
+        if(size < 2) {
+            size = 2;
+        }
+        else if(size > 16) {
+            size = 16;
+        }
+
+        original_model = shape_py.callAttr("generateShape", this.shape, size).toJava(byte[].class);
+
+        return rotate();
     }
 
     @Override
@@ -96,7 +117,12 @@ public class ModelShape extends Model {
         yoff = 0;
         zoff = 0;
 
-        rotatedModel = model;
+        size = 12;
+
+        original_model = shape_py.callAttr("generateShape", this.shape, size).toJava(byte[].class);
+
+        model = original_model;
+        rotatedModel = original_model;
 
         return model;
     }

@@ -93,11 +93,11 @@ public class GestureFragment extends Fragment{
         });
 
         binding.zoomIn.setOnClickListener(v -> {
-            mainViewModel.scale(.5);
+            mainViewModel.scale(2);
         });
 
         binding.zoomOut.setOnClickListener(v -> {
-            mainViewModel.scale(2);
+            mainViewModel.scale(-2);
         });
     }
 

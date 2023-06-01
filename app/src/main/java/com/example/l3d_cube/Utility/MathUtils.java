@@ -22,21 +22,21 @@ public class MathUtils {
         return new Expression(equation, varX, varY, varZ).checkSyntax();
     }
 
-    public static double getScale(int zoom){
+    public static int getScale(int zoom){
         if(zoom == 2) {
-            return .5;
-        }
-        else if(zoom == 3) {
-            return .25;
-        }
-        else if(zoom == 5) {
             return 2;
         }
+        else if(zoom == 3) {
+            return 2;
+        }
+        else if(zoom == 5) {
+            return -2;
+        }
         else if(zoom == 6) {
-            return 4;
+            return -2;
         }
         else {
-            return 1;
+            return 0;
         }
     }
 

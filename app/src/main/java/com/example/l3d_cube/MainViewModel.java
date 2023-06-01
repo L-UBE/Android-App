@@ -102,10 +102,12 @@ public class MainViewModel extends AndroidViewModel {
             }).start();
         }
 
-        else if(incomingData[0] == 0x10) {
-            new Thread(() -> {
-                reset();
-            }).start();
+        else if(incomingData[0] == 0x0A) {
+            if(incomingData[1] == 0x00) {
+                new Thread(() -> {
+                    reset();
+                }).start();
+            }
         }
     }
 
@@ -182,7 +184,7 @@ public class MainViewModel extends AndroidViewModel {
         }).start();
     }
 
-    public void scale(double scale) {
+    public void scale(int scale) {
         if(!checkPreconditions()){
             return;
         }
