@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         autoConnect();
 
-        mainViewModel.completeHandshake();
+//        mainViewModel.completeHandshake();
     }
 
     public void startAsyncAnimation() {

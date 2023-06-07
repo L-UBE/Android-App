@@ -8,105 +8,113 @@
     tools:context=".ui.UploadFragment"
     android:weightSum="8">
 
-    <ImageButton
+    <Button
         android:id="@+id/preset1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:src="@drawable/ic_cube"
         android:layout_margin="5dp"
+        android:text="Cube"
+        android:textSize="25sp"
+        android:backgroundTint="@color/gray2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/preset2"
         app:layout_constraintBottom_toTopOf="@id/preset5"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/preset2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:src="@drawable/ic_sphere"
         android:layout_margin="5dp"
+        android:text="Sphere"
+        android:textSize="25sp"
+        android:backgroundTint="@color/gray2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/preset1"
         app:layout_constraintEnd_toStartOf="@id/preset3"
         app:layout_constraintBottom_toTopOf="@id/preset6"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/preset3"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:src="@drawable/send"
         android:layout_margin="5dp"
+        android:text="Cylinder"
+        android:textSize="25sp"
+        android:backgroundTint="@color/gray2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/preset2"
         app:layout_constraintEnd_toStartOf="@id/preset4"
         app:layout_constraintBottom_toTopOf="@id/preset7"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/preset4"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:src="@drawable/ic_pyramid"
         android:layout_margin="5dp"
+        android:text="Rhomboid"
+        android:textSize="25sp"
+        android:backgroundTint="@color/gray2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/preset3"
         app:layout_constraintBottom_toTopOf="@id/preset8"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/preset5"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:src="@drawable/send"
         android:layout_margin="5dp"
+        android:backgroundTint="@color/gray2"
         app:layout_constraintTop_toBottomOf="@id/preset1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/preset6"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/preset6"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:src="@drawable/send"
         android:layout_margin="5dp"
+        android:backgroundTint="@color/gray2"
         app:layout_constraintTop_toBottomOf="@id/preset2"
         app:layout_constraintStart_toEndOf="@+id/preset5"
         app:layout_constraintEnd_toStartOf="@id/preset7"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/preset7"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:src="@drawable/send"
         android:layout_margin="5dp"
+        android:backgroundTint="@color/gray2"
         app:layout_constraintTop_toBottomOf="@id/preset3"
         app:layout_constraintStart_toEndOf="@id/preset6"
         app:layout_constraintEnd_toStartOf="@id/preset8"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/preset8"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:src="@drawable/send"
         android:layout_margin="5dp"
+        android:backgroundTint="@color/gray2"
         app:layout_constraintTop_toBottomOf="@id/preset4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/preset7"

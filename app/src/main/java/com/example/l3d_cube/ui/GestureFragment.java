@@ -99,6 +99,10 @@ public class GestureFragment extends Fragment{
         binding.zoomOut.setOnClickListener(v -> {
             mainViewModel.scale(-2);
         });
+
+        binding.reset.setOnClickListener(v -> {
+            mainViewModel.reset();
+        });
     }
 
 //    class GestureListener extends GestureDetector.SimpleOnGestureListener {
