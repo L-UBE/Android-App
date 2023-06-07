@@ -127,7 +127,7 @@ public class MainViewModel extends AndroidViewModel {
         }
 
         new Thread(() -> {
-            model = new ModelGeneric(genericModel);
+            model = new ModelGeneric(rotation_py, shape_py, genericModel);
             refresh(model.getModel());
         }).start();
     }

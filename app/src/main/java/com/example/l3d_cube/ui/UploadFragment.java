@@ -12,6 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.l3d_cube.MainViewModel;
+import com.example.l3d_cube.Model.PresetShapes.Cat;
+import com.example.l3d_cube.Model.PresetShapes.Cityscape;
+import com.example.l3d_cube.Model.PresetShapes.Interior;
+import com.example.l3d_cube.Model.PresetShapes.Logo;
 import com.example.l3d_cube.databinding.FragmentUploadBinding;
 
 public class UploadFragment extends Fragment {
@@ -50,21 +54,23 @@ public class UploadFragment extends Fragment {
         });
 
         binding.preset5.setOnClickListener(v -> {
-            byte[] testData = new byte[4096];
-            java.util.Arrays.fill(testData, 0, 4096, (byte) 0x01);
-            mainViewModel.setGenericModel(testData);
+            byte[] cityscape = Cityscape.cityscape;
+            mainViewModel.setGenericModel(cityscape);
         });
 
         binding.preset6.setOnClickListener(v -> {
-
+            byte[] interior = Interior.interior;
+            mainViewModel.setGenericModel(interior);
         });
 
         binding.preset7.setOnClickListener(v -> {
-
+            byte[] logo = Logo.logo;
+            mainViewModel.setGenericModel(logo);
         });
 
         binding.preset8.setOnClickListener(v -> {
-
+            byte[] cat = Cat.cat;
+            mainViewModel.setGenericModel(cat);
         });
     }
 

@@ -24,7 +24,7 @@ public class ModelShape extends Model {
 
     public ModelShape(PyObject rotation_py, PyObject shape_py, String shape) {
         this.shape = shape;
-        this.original_model = shape_py.callAttr("generateShape", this.shape, size).toJava(byte[].class);
+        original_model = shape_py.callAttr("generateShape", this.shape, size).toJava(byte[].class);
         model = original_model;
         rotatedModel = model;
 
